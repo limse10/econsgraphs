@@ -43,6 +43,7 @@ class TextBox {
     w.wrect(x, y, wid, h);
     textAlign(LEFT, TOP);
     textSize(20);
+    fill(0);
     w.write(t, x, y);
 
     if (textWidth(t)>u) {

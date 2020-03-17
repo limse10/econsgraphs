@@ -5,7 +5,7 @@ class Point {
   Line l1, l2;
   boolean hover = false;
   boolean selected = false;
-  float r=u/6;
+  float r=u/3;
   Line lx = new Line();
   Line ly = new Line();
   Line[] exs = new Line[0];

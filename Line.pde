@@ -15,7 +15,7 @@ class Line {
   float rightbound=0;
 
   float r = u/4;
-  float asr = u;
+  float asr = 2*u;
   int sw = 4;
 
 

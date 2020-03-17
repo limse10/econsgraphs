@@ -10,7 +10,7 @@ String[] sb2l = {"Edit\nIntersections", "Edit\nExtensions", "Edit\nFree Points"}
 Button[] sb3 = new Button[2];
 String[] sb3l = {"Add Text", "Delete Text"};
 Button[] sb4 = new Button[3];
-String[] sb4l = {"Begin Shade", "End Shade", "Delete Shade"};
+String[] sb4l = {"Select Area", "Shade", "Delete Shade"};
 
 Line[][] lines = new Line[4][0];
 Line[] DD = new Line[0];
@@ -79,7 +79,7 @@ void setup() {
     sb4[i].visible=false;
   }
 
-  //beginRecord(SVG, "filename.svg");
+  beginRecord(SVG, "filename.svg");
 
   //Line testl = new Line();
   //testl.create(-2,0,0,0,0);
@@ -664,7 +664,7 @@ void mousePressed() {
     PImage crop = get(w.x+3, w.y+3, w.w-3, w.h-3);
     imageCount++;
     crop.save("Diagrams/" + "diagram-" + imageCount + ".png");
-    //endRecord();
+    endRecord();
   }
 
 
