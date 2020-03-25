@@ -1,9 +1,8 @@
 
 Button[] bs = new Button[5];
-//ArrayList<Button> bs = new ArrayList<Button>();
 String[] bls = {"Lines", "Points", "Text", "Shading", "Export", };
 Button[] sb1 = new Button[5];
-String[] sb1l = {"Delete Line", "Add DD", "Add SS", "Add Curve", "Add AS"};
+String[] sb1l = {"Delete Line", "Add Line", "Add Curve", "Add Super\nCool Curve", "Add AS"};
 Button[] sb2 = new Button[3];
 String[] sb2l = {"Edit\nIntersections", "Edit\nExtensions", "Edit\nFree Points"};
 Button[] sb3 = new Button[2];
@@ -11,12 +10,9 @@ String[] sb3l = {"Add Text", "Delete Text"};
 Button[] sb4 = new Button[3];
 String[] sb4l = {"Select Area", "Shade", "Delete Shade"};
 
-Line[][] lines = new Line[4][0];
-Line[] DD = new Line[0];
-Line[] SS = new Line[0];
-Line[] curves = new Line[0];
-Line[] AS = new Line[0];
+Line[] lines = new Line[0];
 
+Point p;
 
 //Point[] imp = new Point[0];
 //Point[] exs = new Point[0];
@@ -29,9 +25,10 @@ int x=0;
 int imageCount = 0;
 int u;
 color bg = color(255);
-boolean focusing = false;
-float mode=0;
+boolean focus = false;
+float mode=-1;
 boolean keyTyped = false;
+int DOTTED = 1;
 void setup() {
   size(1200, 800);
   //fullScreen();
@@ -77,26 +74,6 @@ void setup() {
     sb4[i].create(sb4l[i], 0, (i+1)*u, u, u, color(130), color(120));
     sb4[i].visible=false;
   }
-
-
-  //Line testl = new Line();
-  //testl.create(-2,0,0,0,0);
-  //  Point[] test = new Point[4];
-  //  test[0]= new Point();
-  //      test[1]= new Point();
-  //  test[2]= new Point();
-  //  test[3]= new Point();
-
-
-  //  test[0].x=100;
-  //  test[0].y=100;
-  //  test[1].x=200;
-  //  test[1].y=300;
-  //  test[2].x=500;
-  //  test[2].y=100;
-  //  test[3].x=600;
-  //  test[3].y=400;
-  //  test=sortP(test);
 }
 
 
@@ -113,20 +90,14 @@ void draw() {
   //l.render();
   //}
   //}
-  for (Line l : DD) {
-    l.render();
-  }
-  for (Line l : SS) {
-    l.render();
-  }
-  for (Line l : curves) {
-    l.render();
-  }
-  for (Line l : AS) {
+  for (Line l : lines) {
     l.render();
   }
 
-  
+
+if(p!=null){
+p.render();
+}
 
 
   for (TextBox tb : tbs) {
@@ -162,33 +133,86 @@ void draw() {
 
 
 void mousePressed() {
-
+focus = false;
   if (bs[0].hovered) {
     mode=0;
-    //add line button
   } 
   if (sb1[0].hovered) {
-    // Delete Line
-
+    for (int i = lines.length-1; i >= 0; i--) {
+      if (lines[i].focusing) {
+        lines = del(lines, i);
+      }
+    }
   }
   if (sb1[1].hovered) {
-    //add demand line button
+    PVector[] p = new PVector[2];
+    p[0] = new PVector(100, 400);
+    p[1] = new PVector(500, 300);
+    Line l = new Line(0, p);
+    lines = (Line[])append(lines, l);
+  }
+  if (sb1[2].hovered) {
+    PVector[] p = new PVector[3];
+    p[0] = new PVector(100, 400);
+    p[1] = new PVector(500, 300);
+    p[2] = new PVector(150, 200);
+    Line l = new Line(0, p);
+    lines = (Line[])append(lines, l);
+  }
+  if (sb1[3].hovered) {
     PVector[] p = new PVector[4];
-    p[0] = new PVector(100,400);
-    p[3] = new PVector(500,300);
-    p[2] = new PVector(150,200);
-    p[1] = new PVector(40,320);
-
-    Line l = new Line(0,p);
-    DD = (Line[])append(DD, l);
+    p[0] = new PVector(100, 400);
+    p[1] = new PVector(500, 300);
+    p[2] = new PVector(150, 200);
+    p[3] = new PVector(200, 200);
+    Line l = new Line(0, p);
+    lines = (Line[])append(lines, l);
+  }
+  if (sb1[4].hovered) {
+    PVector[] p = new PVector[2];
+    p[0] = new PVector(100, 100);
+    p[1] = new PVector(500, 500);
+    Line l = new Line(1, p);
+    lines = (Line[])append(lines, l);
+  }
+  if (bs[1].hovered) {
+    mode=1;
+    p = new Point(0,lines[0],lines[1]);
+  } 
+  
+  
+  if (bs[2].hovered) {
+    mode=2;
+  } 
+  if (bs[3].hovered) {
+    mode=3;
+  } 
+  
+  
+  
+  
+  
+  
+  
+ 
+  focus=false;
+  if (mode==0) {
+    for (Line l : lines) {
+      if (l.hovering&&!focus) {
+        l.focusing = true;
+        focus=true;
+        for (int i = 0; i < l.p.length; i++) {
+          l.transoff[i].x=w.mx-l.p[i].x;
+          l.transoff[i].y=w.my-l.p[i].y;
+        }
+      } else {
+        l.focusing = false;
+        focus=false;
+      }
+    }
   }
 
 
-
-  
-
-  
- 
   if (mode == 0) {
     for (Button b : sb1) {
       b.visible=true;
@@ -296,19 +320,26 @@ Fill[] del(Fill[] input, int index) {
 
 
 
-int choose(int n, int r){
-int output = 1;
-for (int i = 1; i <= r; i++)
-{
+int choose(int n, int r) {
+  int output = 1;
+  for (int i = 1; i <= r; i++)
+  {
     output *= n - (r - i);
     output /= i;
-}
-return output;
-
+  }
+  return output;
 }
 
 
 void keyPressed() {
+  if(mode==0&&key==DELETE){
+  for (int i = lines.length-1; i >= 0; i--) {
+      if (lines[i].focusing) {
+        lines = del(lines, i);
+      }
+    }
+  }
+  
   for (TextBox tb : tbs) {
     if (tb.focus) {
       if (key!=BACKSPACE&&key!=DELETE) {

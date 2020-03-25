@@ -9,8 +9,15 @@
     /></g
     ><g style="text-rendering:optimizeLegibility;"
     ><text x="8" xml:space="preserve" y="800" style="stroke:none;"
-      >-200, 760</text
-    ></g
+      >637, 757</text
+      ><line x1="223" x2="900" y1="247" style="stroke-linecap:round; fill:none; text-rendering:auto; stroke-width:4;" y2="760"
+      /><line x1="200" x2="900" y1="120" style="stroke-linecap:round; fill:none; text-rendering:auto; stroke-width:4;" y2="660"
+      /><line x1="200" x2="854" y1="120" style="stroke-linecap:round; fill:none; text-rendering:auto; stroke-width:4;" y2="410"
+      /><line x1="300" x2="1000" y1="760" style="stroke-linecap:round; fill:none; text-rendering:auto; stroke-width:4;" y2="120"
+      /><circle style="stroke-linecap:round; fill:none; text-rendering:auto; stroke-width:3;" r="13" cx="571.915" cy="511.392"
+      /><circle style="stroke-linecap:round; fill:none; text-rendering:auto; stroke-width:3;" r="13" cx="633.8983" cy="454.7216"
+      /><circle style="stroke-linecap:round; fill:none; text-rendering:auto; stroke-width:3;" r="13" cx="738.7219" cy="358.8828"
+    /></g
     ><g style="fill:rgb(100,100,100); stroke-width:4; stroke-linecap:round; stroke:rgb(100,100,100);"
     ><rect x="0" width="1200" height="80" y="0" style="stroke:none;"
       /><rect x="0" y="0" width="1200" style="fill:none; stroke:black;" height="80"
@@ -38,8 +45,26 @@
       /><rect x="400" y="0" width="80" style="text-rendering:auto; fill:none;" height="80"
       /><text x="421" xml:space="preserve" y="46" style="stroke:none;"
       >Export</text
+      ><rect x="0" y="80" width="80" style="fill:rgb(130,130,130); text-rendering:auto; stroke:none;" height="80"
+      /><rect x="0" y="80" width="80" style="text-rendering:auto; fill:none;" height="80"
+      /><text x="29" xml:space="preserve" y="116" style="stroke:none;"
+      >Edit</text
+      ><text x="3" xml:space="preserve" y="136" style="stroke:none;"
+      >Intersections</text
+      ><rect x="0" y="160" width="80" style="fill:rgb(130,130,130); text-rendering:auto; stroke:none;" height="80"
+      /><rect x="0" y="160" width="80" style="text-rendering:auto; fill:none;" height="80"
+      /><text x="29" xml:space="preserve" y="196" style="stroke:none;"
+      >Edit</text
+      ><text x="8" xml:space="preserve" y="216" style="stroke:none;"
+      >Extensions</text
+      ><rect x="0" y="240" width="80" style="fill:rgb(130,130,130); text-rendering:auto; stroke:none;" height="80"
+      /><rect x="0" y="240" width="80" style="text-rendering:auto; fill:none;" height="80"
+      /><text x="29" xml:space="preserve" y="276" style="stroke:none;"
+      >Edit</text
+      ><text x="8" xml:space="preserve" y="296" style="stroke:none;"
+      >Free Points</text
       ><text x="8" xml:space="preserve" y="800" style="stroke:none;"
-      >-200, 760</text
+      >637, 757</text
       ><line x1="200" x2="200" y1="760" style="fill:none; text-rendering:auto; stroke-width:4;" y2="120"
       /><line x1="200" x2="1000" y1="760" style="fill:none; text-rendering:auto; stroke-width:4;" y2="760"
       /><line x1="200" x2="190" y1="120" style="fill:none; text-rendering:auto; stroke-width:4;" y2="140"
