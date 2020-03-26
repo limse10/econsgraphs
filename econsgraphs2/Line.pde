@@ -12,11 +12,12 @@ class Line {
   PVector curr = new PVector();
   PVector next = new PVector();
   PVector[] transoff;
+  boolean exselected=true;
 
 
   Line(int type, PVector[] p) {
     this.type=type;
-    if (type==0) {
+    if (type==0||type==2) {
       this.n=p.length-1;
     }   
     this.p=p;
@@ -26,12 +27,15 @@ class Line {
     }
   }
 
+
   void render() {
     hovering = false;
-    if (focusing&&mode==0) {
-      move();
+    if (type<=1) {
+      if (focusing&&mode==0) {
+        move();
+      }
     }
-    if (n<=3) {////////////////////////////////////////////draw bezier///////////////////////////////////////////////
+    if (type==0) {////////////////////////////////////////////draw bezier///////////////////////////////////////////////
       t=0;
       while (t<=1) {
         curr.x=0;
@@ -98,10 +102,10 @@ class Line {
     if (type==1) {//////////////////////////////////draw AS/////////////////////////////////
 
 
-      
+
       if ((abs(w.mx-p[1].x)<0.5*r&&w.my>p[0].y+asr&&w.my<p[1].y)||
-      (abs(w.my-p[0].y)<0.5*r&&w.mx>p[0].x&&w.mx<p[1].x-asr)||
-      ((sq(w.mx-p[1].x+asr)+sq(w.my-p[0].y-asr))>sq(asr-0.5*r)&&(sq(w.mx-p[1].x+asr)+sq(w.my-p[0].y-asr))<sq(asr+0.5*r))) {
+        (abs(w.my-p[0].y)<0.5*r&&w.mx>p[0].x&&w.mx<p[1].x-asr)||
+        ((sq(w.mx-p[1].x+asr)+sq(w.my-p[0].y-asr))>sq(asr-0.5*r)&&(sq(w.mx-p[1].x+asr)+sq(w.my-p[0].y-asr))<sq(asr+0.5*r))&&w.mx>p[1].x-asr&&w.my<p[0].y+asr) {
         hovering = true;
       }
       stroke(0);
@@ -134,6 +138,32 @@ class Line {
             translating = false;
           }
         }
+      }
+    }
+    if (type==2) {//////////////////////////////////////////////////draw extension //////////////////////////////////////////////////////
+      if (mode==1) {
+        if (p[0].x==p[1].x) {
+          if (abs(w.mx-p[0].x)<0.5*r&&w.my<p[0].y-r&&w.my>p[1].y) {
+            hovering = true;
+          } else {
+            hovering = false;
+          }
+        } else if (p[0].y==p[1].y) {
+          if (abs(w.my-p[0].y)<0.5*r&&w.mx<p[0].x-r&&w.mx>p[1].x) {
+            hovering = true;
+          } else {
+            hovering = false;
+          }
+        }
+      }
+      strokeWeight(2);
+      stroke(0);
+      if (hovering&&mode==1) {
+        stroke(255, 127, 127);
+      }
+
+      if (exselected||hovering) {
+        w.wline(p[1].x, p[1].y, p[0].x, p[0].y, DOTTED);
       }
     }
   }

@@ -56,7 +56,15 @@ class Window {
   void wline(float x1, float y1, float x2, float y2) {
     line(u+3*m+x1, height-m-y1, u+3*m+x2, height-m-y2);
   }
-  
+  void wline(float x1, float y1, float x2, float y2, int dot) {
+    float t=0;
+    float tres = dist(x1,y1,x2,y2)/5000;
+    while (t<1) {
+      wline(x1+t*(x2-x1), y1+t*(y2-y1), x1+(t+tres/2)*(x2-x1), y1+(t+tres/2)*(y2-y1));
+      t+=tres;
+    }
+  }
+
 
   void wcircle(float x, float y, float r) {
     ellipse(u+3*m+x, height-m-y, r, r);
