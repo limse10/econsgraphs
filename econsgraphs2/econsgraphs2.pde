@@ -14,14 +14,15 @@ Line[] lines = new Line[0];
 
 Point[] points = new Point[0];
 
+Fill[] fills = new Fill[0];
+Point[] fill = new Point[0];
+
 Boolean[] keys = new Boolean[3];
 Line copied;
-//Point[] imp = new Point[0];
-//Point[] exs = new Point[0];
+
 TextBox[] tbs = new TextBox[0];
 Window w = new Window();
-Fill[] fills = new Fill[0];
-//Point[] fill = new Point[0];
+
 
 int x=0;
 int imageCount = 0;
@@ -79,6 +80,11 @@ void setup() {
     sb4[i].create(sb4l[i], 0, (i+1)*u, u, u, color(130), color(120));
     sb4[i].visible=false;
   }
+  
+  
+  //int[] input = {0,1,2,6,7,8};
+  //int[] insert = {3,4,5};
+  //println(insert(input,insert,2));
 }
 
 
@@ -88,21 +94,17 @@ void draw() {
   w.renderWindow();   
 
   for (Fill f : fills) {
-    //f.render();
+    f.render();
   }
-  //for(Line[] ls : lines){
-  //for(Line l : ls){
-  //l.render();
-  //}
-  //}
+
   for (Line l : lines) {
     l.render();
   }
 
   for (Point p : points) {
     p.render();
-    for(Point x : p.ps){
-    x.render();
+    for (Point x : p.ps) {
+      x.render();
     }
   }
 
@@ -194,66 +196,7 @@ void mousePressed() {
   }
   if (bs[1].hovered) {
     mode=1;
-    for (Line l : lines) {
-      for (Line k : lines) {
-        if (l!=k) {
-          boolean solved=false;
-          for (Point p : points) {
-            if ((p.l1==l&&p.l2==k)||(p.l1==k&&p.l2==l)) {
-              solved=true;
-            }
-          }
-          if (!solved) {
-            if (l.type==0&&k.type==0) {
-              if (l.n==1&&k.n==1) {
-                Point p = new Point(0, l, k);
-                points=(Point[])append(points, p);
-              } else if (l.n==1&&k.n==2) {
-                Point p = new Point(0, l, k, -1);
-                points=(Point[])append(points, p);
-                p = new Point(0, l, k, 1);
-                points=(Point[])append(points, p);
-              } else if (l.n==1&&k.n==3) {
-              }
-            } else if (l.type==0&&k.type==1) {
-              Point p = new Point(0, l, k);
-              points=(Point[])append(points, p);
-            }
-          }
-        }
-      }
-    } 
-
-    for (Point x : points) {
-      for (Line l : x.ls) {
-        for (Line k : lines) {
-
-          if (l!=k&&k!=x.l1&&k!=x.l2) {
-            boolean solved=false;
-            for (Point p : x.ps) {
-              if ((p.l1==l&&p.l2==k)||(p.l1==k&&p.l2==l)) {
-                solved=true;
-              }
-            }
-            
-
-            if (!solved) {
-              if (k.type==0) {
-                if (k.n==1) {
-                  Point p = new Point(1, l, k);
-                  x.ps=(Point[])append(x.ps, p);
-                } else if (k.n==2) {
-                  Point p = new Point(1, l, k, -1);
-                  x.ps=(Point[])append(x.ps, p);
-                  p = new Point(1, l, k, 1);
-                  x.ps=(Point[])append(x.ps, p);
-                }
-              }
-            }
-          }
-        }
-      }
-    } 
+    calculatePoints();
     println("-------------------------------------");
 
     println("current points:");
@@ -271,8 +214,49 @@ void mousePressed() {
     mode=2;
   } 
   if (bs[3].hovered) {
-    mode=3;
-  } 
+    /////////////shading
+    mode = 3;
+    calculatePoints();
+  }
+
+  if (sb4[0].hovered) {
+    mode = 3.1;
+  }
+  if (sb4[1].hovered) {
+    Point[] fillpts = new Point[0];
+    for (Point p : points) {
+      for (Point x : p.ps) {
+
+        if (x.shading) {
+          fillpts=(Point[])append(fillpts, x);
+        }
+      }
+      if (p.shading) {
+        fillpts=(Point[])append(fillpts, p);
+      }
+    }
+    Fill f = new Fill(sortP(fillpts));
+
+    fills=(Fill[])append(fills, f);
+
+
+    for (Point p : points) {
+      for (Point x : p.ps) {
+
+        x.shading=false;
+      }
+      p.shading=false;
+    }
+    fillpts = new Point[0];
+    mode = 3;
+  }
+  if (sb4[2].hovered) {
+    for (int i=fills.length-1; i>=0; i--) {
+      if (fills[i].focusing) {
+        fills=del(fills, i);
+      }
+    }
+  }
 
 
 
@@ -301,9 +285,10 @@ void mousePressed() {
     }
   }
   if (mode==1) {
+    boolean ihaveselectedsomethingalready=false;
     for (Point p : points) {
       for (Line l : p.ls) {
-        if (mousePressed&&l.hovering) {
+        if (l.hovering) {
           if (!l.exselected) {
             l.exselected=true;
           } else {
@@ -311,18 +296,86 @@ void mousePressed() {
           }
         }
       }
-      if (mousePressed&&p.hovering) {
+      if (p.hovering) {
         if (!p.selected) {
           p.selected=true;
+          ihaveselectedsomethingalready=true;
           for (Line l : p.ls) {
             l.exselected=true;
           }
         } else {
           p.selected=false;
+          ihaveselectedsomethingalready=true;
+        }
+      }
+
+      if (!ihaveselectedsomethingalready) {
+        for (Point x : p.ps) {
+          for (Line l : x.ls) {
+            if (l.hovering) {
+              if (!l.exselected) {
+                l.exselected=true;
+              } else {
+                l.exselected=false;
+              }
+            }
+          }
+          if (x.hovering) {
+            if (!x.selected) {
+              x.selected=true;
+              for (Line l : x.ls) {
+                l.exselected=true;
+              }
+            } else {
+              x.selected=false;
+            }
+          }
         }
       }
     }
   }
+  if (mode==3.1) {
+    boolean ihaveselectedsomethingalready=false;
+    for (Point p : points) {
+
+      if (p.hovering) {
+        if (!p.shading) {
+          p.shading=true;
+          ihaveselectedsomethingalready=true;
+        } else {
+          p.shading=false;
+          ihaveselectedsomethingalready=true;
+        }
+      }
+
+      if (!ihaveselectedsomethingalready) {
+        for (Point x : p.ps) {
+
+          if (x.hovering) {
+            if (!x.shading) {
+              x.shading=true;
+            } else {
+              x.shading=false;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  if ((int)mode==3) {
+    for (Fill f : fills) {
+
+      if (f.hovering&&!focus) {
+        f.focusing=true;
+        focus=true;
+      } else {
+        f.focusing=false;
+        focus=false;
+      }
+    }
+  }
+
   if (mode == 0) {
     for (Button b : sb1) {
       b.visible=true;

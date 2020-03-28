@@ -4,9 +4,10 @@ class Point {
   int root;
   Line l1, l2;
   float r = u/3;
-  boolean visible = false;
+  boolean exists = false;
   boolean hovering = false;
   boolean selected = false;
+  boolean shading = false;
   Point[] ps = new Point[0];
   Line[] ls = new Line[0];
 
@@ -52,7 +53,18 @@ class Point {
       hovering = false;
     }
 
-    if (visible||selected) {
+    if (exists||selected) {
+      ls[0].p[0].x=x;
+      ls[0].p[0].y=y;
+      ls[0].p[1].x=x;
+      ls[1].p[0].x=x;
+      ls[1].p[0].y=y;
+      ls[1].p[1].y=y;
+      if (((hovering&&mode==1)||selected)&&exists) {
+        for (Line l : ls) {
+          l.render();
+        }
+      }
       if (mode==1) {
         stroke(0);
         noFill();
@@ -61,26 +73,46 @@ class Point {
         } else if (hovering) {
           stroke(250, 127, 127);
         }
+        if (type==0) {
 
-        strokeWeight(3);
-        w.wcircle(x, y, r);
-      }
-      ls[0].p[0].x=x;
-      ls[0].p[0].y=y;
-      ls[0].p[1].x=x;
-      ls[1].p[0].x=x;
-      ls[1].p[0].y=y;
-      ls[1].p[1].y=y;
-      if (selected&&visible) {
-        for (Line l : ls) {
-          l.render();
+          strokeWeight(3);
+          w.wcircle(x, y, r);
+        }
+        if (type==1) {
+          if (hovering||selected) {
+            strokeWeight(2);
+            w.wcircle(x, y, r*0.75);
+          }
+        }
+      } else if (mode==3.1) {
+        stroke(0);
+        noFill();
+        if (shading) {
+          stroke(127, 255, 127);
+        } else if (hovering&&mode==3.1) {
+          stroke(80, 127, 80);
+        }
+        if (type==0) {
+
+          strokeWeight(3);
+          w.wcircle(x, y, r);
+        }
+        if (type==1) {
+          if (hovering||shading) {
+            strokeWeight(2);
+            w.wcircle(x, y, r*0.75);
+          }
         }
       }
     }
   }
 
   void solve() {
-    if ((l1.type==0||l1.type==2)&&l2.type==0) {
+    if (type==-1) {
+
+      x=Float.NaN;
+      y=Float.NaN;
+    } else if (l1.type==0&&l2.type==0) {
       if (l1.n==1&&l2.n==1) {////////////////////////////////////////////////////////////////solve 2 linear//////////////////////////////////////////////////////////////
 
         float y0=l1.p[0].y;
@@ -96,14 +128,14 @@ class Point {
           x=x2+tb*(x3-x2);
           y=y2+tb*(y3-y2);
           if (((y-y0)/(y1-y0)>0&&(y-y0)/(y1-y0)<1)&&((y-y2)/(y3-y2)>0&&(y-y2)/(y3-y2)<1)) {
-            visible=true;
+            exists=true;
           } else {
-            visible = false;
+            exists = false;
           }
         } else {
           x=Float.NaN;
           y=Float.NaN;
-          visible=false;
+          exists=false;
         }
       } else if (l1.n==1&&l2.n==2) {////////////////////////////////////////////////////////////solve linear + quad//////////////////////////////////////////////////
         float y0=l1.p[0].y;
@@ -136,24 +168,64 @@ class Point {
 
         x=sq(1-t)*p0x+2*(1-t)*t*p1x+sq(t)*p2x;
         y=sq(1-t)*p0y+2*(1-t)*t*p1y+sq(t)*p2y;
-        if (t>0&&t<1&&type==0) {
-          if ((y-y0)/(y1-y0)>0&&(y-y0)/(y1-y0)<1) {
-            visible=true;
+        if (t>0&&t<1) {
+          if ((y-y0)/(y1-y0)>0&&(y-y0)/(y1-y0)<1&&(x-x0)/(x1-x0)>0&&(x-x0)/(x1-x0)<1) {
+            exists=true;
           } else {
-            visible = false;
+            exists = false;
           }
-        } else if(type==1){
-        visible=true;
-        
         } else {
           x=Float.NaN;
           y=Float.NaN;
-          visible=false;
+          exists=false;
+        }
+      } else if (l1.n==1&&l2.n==3) {//solve linear + cubic
+      }
+    } else if (l1.type==0&&l2.type==1) {//solve linear + AS
+    } else if (l1.type==2&&l2.type==0) {
+      if (l2.n==1) {//solve extension and linear
+        if (l1.p[0].x==l1.p[1].x) {
+          x=l1.p[0].x;
+          float m = (l2.p[1].y-l2.p[0].y)/(l2.p[1].x-l2.p[0].x);
+          float c = l2.p[0].y-m*l2.p[0].x;
+          y=m*x+c;
+        } else if (l1.p[0].y==l1.p[1].y) {
+          y=l1.p[0].y;
+          float m = (l2.p[1].y-l2.p[0].y)/(l2.p[1].x-l2.p[0].x);
+          float c = l2.p[0].y-m*l2.p[0].x;
+          x=(y-c)/m;
+        }      
+        exists = true;
+
+        if (x>max(l2.p[0].x, l2.p[1].x)||x<min(l2.p[0].x, l2.p[1].x)||y>max(l2.p[0].y, l2.p[1].y)||y<min(l2.p[0].y, l2.p[1].y)) {
+          x=Float.NaN;
+          y=Float.NaN;
+          exists=false;
+        }
+      } else if (l2.n==2) {//solve extension and quadratic
+        PVector ps[] = new PVector[2];
+        if (l1.p[0].x==l1.p[1].x) {
+          x=l1.p[0].x;
+          ps[0]=new PVector(x, 0);
+          ps[1]=new PVector(x, w.h);
+          Line l = new Line(0, ps);
+          Point p = new Point(0, l, l2, root);
+          p.solve();
+          x=p.x;
+          y=p.y;
+          exists=true;
+        } else if (l1.p[0].y==l1.p[1].y) {
+          y=l1.p[0].y;
+          ps[0]=new PVector(0, y);
+          ps[1]=new PVector(w.w, y);
+          Line l = new Line(0, ps);
+          Point p = new Point(0, l, l2, root);
+          p.solve();
+          x=p.x;
+          y=p.y;
+          exists=true;
         }
       }
-    } else if (l1.n==1&&l2.n==3) {//solve linear + cubic
-    
-  } else if (l1.type==0&&l2.type==1) {//solve linear + AS
-}
-}
+    }
+  }
 }

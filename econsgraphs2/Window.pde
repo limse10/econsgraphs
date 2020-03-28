@@ -57,11 +57,26 @@ class Window {
     line(u+3*m+x1, height-m-y1, u+3*m+x2, height-m-y2);
   }
   void wline(float x1, float y1, float x2, float y2, int dot) {
-    float t=0;
-    float tres = dist(x1,y1,x2,y2)/5000;
-    while (t<1) {
-      wline(x1+t*(x2-x1), y1+t*(y2-y1), x1+(t+tres/2)*(x2-x1), y1+(t+tres/2)*(y2-y1));
-      t+=tres;
+    float gap = 20;
+    if (x1==x2) {
+      float ystart = min(y1, y2);
+      float yend = max(y1, y2);
+      float yx = ystart;
+      while (yx<yend-gap) {
+        wline(x1, yx, x2, yx+gap/2);
+        yx+=gap;
+      }
+      wline(x1, yx, x2, yend);
+    } 
+    if (y1==y2) {
+      float xstart = min(x1, x2);
+      float xend = max(x1, x2);
+      float xy = xstart;
+      while (xy<xend-gap) {
+        wline(xy, y1, xy+gap/2, y2);
+        xy+=gap;
+      }
+      wline(xy, y1, xend, y2);
     }
   }
 
