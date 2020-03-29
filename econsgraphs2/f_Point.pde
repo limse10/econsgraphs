@@ -11,21 +11,25 @@ class Point {
   Point[] ps = new Point[0];
   Line[] ls = new Line[0];
 
+
+
   Point(int type, Line l1, Line l2) {
     this.type=type;
     this.l1=l1;
     this.l2=l2;
     solve();
-    PVector[] x = new PVector[2];
-    x[0] = new PVector(this.x, this.y);
-    x[1] = new PVector(this.x, 0);
-    Line lx = new Line(2, x);
-    ls=(Line[])append(ls, lx);
-    PVector[] y = new PVector[2];
-    y[0] = new PVector(this.x, this.y);
-    y[1] = new PVector(0, this.y);
-    Line ly = new Line(2, y);
-    ls=(Line[])append(ls, ly);
+    if (type==0||type==1) {
+      PVector[] x = new PVector[2];
+      x[0] = new PVector(this.x, this.y);
+      x[1] = new PVector(this.x, 0);
+      Line lx = new Line(2, x);
+      ls=(Line[])append(ls, lx);
+      PVector[] y = new PVector[2];
+      y[0] = new PVector(this.x, this.y);
+      y[1] = new PVector(0, this.y);
+      Line ly = new Line(2, y);
+      ls=(Line[])append(ls, ly);
+    }
   }
   Point(int type, Line l1, Line l2, int root) {
     this.type=type;
@@ -54,15 +58,17 @@ class Point {
     }
 
     if (exists||selected) {
-      ls[0].p[0].x=x;
-      ls[0].p[0].y=y;
-      ls[0].p[1].x=x;
-      ls[1].p[0].x=x;
-      ls[1].p[0].y=y;
-      ls[1].p[1].y=y;
-      if (((hovering&&mode==1)||selected)&&exists) {
-        for (Line l : ls) {
-          l.render();
+      if (type==0||type==1) {
+        ls[0].p[0].x=x;
+        ls[0].p[0].y=y;
+        ls[0].p[1].x=x;
+        ls[1].p[0].x=x;
+        ls[1].p[0].y=y;
+        ls[1].p[1].y=y;
+        if (((hovering&&mode==1)||selected)&&exists) {
+          for (Line l : ls) {
+            l.render();
+          }
         }
       }
       if (mode==1) {
@@ -78,29 +84,28 @@ class Point {
           strokeWeight(3);
           w.wcircle(x, y, r);
         }
-        if (type==1) {
+        if (type==1||type==2) {
           if (hovering||selected) {
             strokeWeight(2);
-            w.wcircle(x, y, r*0.75);
+            w.wcircle(x, y, r);
           }
         }
       } else if (mode==3.1) {
         stroke(0);
         noFill();
         if (shading) {
-          stroke(127, 255, 127);
+          stroke(127, 127, 255);
         } else if (hovering&&mode==3.1) {
           stroke(80, 127, 80);
         }
         if (type==0) {
-
           strokeWeight(3);
           w.wcircle(x, y, r);
         }
-        if (type==1) {
+        if (type==1||type==2) {
           if (hovering||shading) {
             strokeWeight(2);
-            w.wcircle(x, y, r*0.75);
+            w.wcircle(x, y, r);
           }
         }
       }
@@ -172,6 +177,7 @@ class Point {
           if ((y-y0)/(y1-y0)>0&&(y-y0)/(y1-y0)<1&&(x-x0)/(x1-x0)>0&&(x-x0)/(x1-x0)<1) {
             exists=true;
           } else {
+           
             exists = false;
           }
         } else {
@@ -226,6 +232,45 @@ class Point {
           exists=true;
         }
       }
+    } else if (l1.type==3&&(l2.type==0||l2.type==2)) {
+      if (l1.p[0].x==l1.p[1].x) {
+        if (l2.p[0].y==l2.p[1].y) {
+          y=l2.p[0].y;
+          x=0;
+        } else if (l2.p[0].x==l2.p[1].x) {
+          x=Float.NaN;
+          y=Float.NaN;
+        } else {
+          x=l1.p[0].x;
+          float m = (l2.p[1].y-l2.p[0].y)/(l2.p[1].x-l2.p[0].x);
+          float c = l2.p[0].y-m*l2.p[0].x;
+          y=m*x+c;
+        }
+      } else if (l1.p[0].y==l1.p[1].y) {
+        if (l2.p[0].x==l2.p[1].x) {
+          y=0;
+          x=l2.p[0].x;
+        } else if (l2.p[0].y==l2.p[1].y) {
+          x=Float.NaN;
+          y=Float.NaN;
+        }else {
+          y=l1.p[0].y;
+          float m = (l2.p[1].y-l2.p[0].y)/(l2.p[1].x-l2.p[0].x);
+          float c = l2.p[0].y-m*l2.p[0].x;
+          x=(y-c)/m;
+        }
+      }   
+      exists = true;
+
+      if (y>w.h||y<0) {
+        x=Float.NaN;
+        y=Float.NaN;
+        exists=false;
+      }
+    } else if (l1.type==3&&l2.type==3) {
+      x=0;
+      y=0;
+      exists=true;
     }
   }
 }

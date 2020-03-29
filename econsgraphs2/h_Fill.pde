@@ -5,6 +5,9 @@ class Fill {
   java.awt.Polygon poly;
   boolean hovering= false;
   boolean focusing = false;
+  color c = color(random(255),random(255),random(255));
+  int alpha = 127;
+  int alpha2 = 200;
 
   Fill(Point[] ps) {
     this.ps=ps;
@@ -12,7 +15,7 @@ class Fill {
   }
 
   void render() {
-    this.ps=ps;
+    
     psv = new PVector[ps.length];
     poly = new java.awt.Polygon();
 
@@ -29,18 +32,18 @@ class Fill {
     checkHover();
 
     if (hovering||focusing) {
-      fill(0, 255, 111);
+      fill(c,alpha2);
     } else {
-      fill(133, 255, 144);
+      fill(c,alpha);
     }
     noStroke();
     beginShape();
     for (PVector p : psv) {
       w.wvertex(p.x, p.y);
-      println(p.x, p.y);
+      //println(p.x, p.y);
     }
     endShape();
-    println("__________________________________________________");
+    //println("__________________________________________________");
   }
 
   void checkHover() {

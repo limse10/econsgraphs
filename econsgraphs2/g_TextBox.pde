@@ -3,11 +3,11 @@ class TextBox {
   float x, y, wid, h;
   float xoff, yoff;
   String t;
-  boolean focus = false;
+  boolean focusing = false;
   boolean moving = false;
-  boolean hover = false;
+  boolean hovering = false;
 
-  void create(String t_, float x_, float y_, float w_, float h_) {
+  TextBox(String t_, float x_, float y_, float w_, float h_) {
     t=t_;
     x=x_;
     y=y_;
@@ -18,7 +18,7 @@ class TextBox {
   void render() {
 
     checkHover();
-    if (focus) {
+    if (focusing) {
       mode = 2;
       if (mousePressed) {
         moving = true;
@@ -31,7 +31,7 @@ class TextBox {
       y=w.my-yoff;
     }
 
-    if (hover||focus) {
+    if (hovering||focusing) {
       strokeWeight(3);
     } else {
       strokeWeight(1);
@@ -44,18 +44,22 @@ class TextBox {
     textAlign(LEFT, TOP);
     textSize(20);
     fill(0);
-    w.write(t, x, y);
+    if (focusing) {
+      w.write(t+"|", x, y);
+    } else {
+      w.write(t, x, y);
+    }
 
     if (textWidth(t)>u) {
-      wid=textWidth(t);
+      wid=textWidth(t+1);
     }
   }
 
   void checkHover() {
     if (w.mx>x&&w.mx<x+wid&&w.my<y&&w.my>y-h) {
-      hover=true;
+      hovering=true;
     } else {
-      hover = false;
+      hovering = false;
     }
   }
 }
