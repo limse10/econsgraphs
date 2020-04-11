@@ -75,14 +75,13 @@ void mousePressed() {
   if (bs[2].hovered) {
     mode=2;
   } 
-  
+
   if (sb3[0].hovered) {
     generateTextBoxes();
-    
   }
   if (sb3[1].hovered) {
-    
-    TextBox tb = new TextBox("", -90,570, u, u/3);
+
+    TextBox tb = new TextBox(-90, 570, u, u/3);
     tbs=(TextBox[])append(tbs, tb);
   }
 
@@ -93,9 +92,9 @@ void mousePressed() {
       }
     }
   }
-  
-  
-  
+
+
+
   for (TextBox tb : tbs) {
     if (tb.hovering&&!focus) {
       tb.xoff=w.mx-tb.x;
@@ -107,7 +106,7 @@ void mousePressed() {
       focus=false;
     }
   }
-  
+
   if (bs[3].hovered) {
     /////////////shading
     mode = 3;
@@ -375,13 +374,30 @@ void mousePressed() {
 
 
 void keyPressed() {
+  if (keyCode==17) {
+    for (TextBox tb : tbs) {
+      if (tb.focusing) {
+        tb.substring++; 
+        tb.t=append(tb.t, "");
+        if (tb.subscripting) {
+          tb.subscripting=false;
+
+          tb.subscript=(boolean[])append(tb.subscript, false);
+        } else {
+          tb.subscripting = true;
+
+          tb.subscript=(boolean[])append(tb.subscript, true);
+        }
+      }
+    }
+  }
 
   if (key==DELETE) {
     if (mode==0) {
       deleteLine();
-    }else if (mode==2){
+    } else if (mode==2) {
       deleteText();
-    }else if (mode==3){
+    } else if (mode==3) {
       deleteFill();
     }
   }
@@ -439,10 +455,10 @@ void keyPressed() {
   for (TextBox tb : tbs) {
     if (tb.focusing) {
       if (key!=BACKSPACE&&key!=DELETE) {
-        tb.t=tb.t+key;
+        tb.t[tb.substring]=tb.t[tb.substring]+key;
       } else {
-        if (tb.t.length()>0) {
-          tb.t = tb.t.substring( 0, tb.t.length()-1 );
+        if (tb.t[tb.substring].length()>0) {
+          //tb.t = tb.t.substring(0, tb.t[tb.substring].length()-1 );
         }
       }
     }

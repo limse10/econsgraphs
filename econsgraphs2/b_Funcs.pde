@@ -1,7 +1,7 @@
 void generateTextBoxes() {
   for (Point p : points) {
 
-    TextBox tb = new TextBox("", p.x-u/2, p.y-u/10, u, u/3);
+    TextBox tb = new TextBox( p.x-u/2, p.y-u/10, u, u/3);
     tbs=(TextBox[])append(tbs, tb);
   }
 
@@ -14,7 +14,7 @@ void generateTextBoxes() {
         py=p.y;
       }
     }
-    TextBox tb = new TextBox("", px-u/4,py+u/2, u, u/3);
+    TextBox tb = new TextBox( px-u/4,py+u/2, u, u/3);
     tbs=(TextBox[])append(tbs, tb);
   }
 }
