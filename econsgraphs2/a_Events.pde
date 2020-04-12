@@ -191,9 +191,47 @@ void mousePressed() {
   }
 
 
+  if (bs[4].hovered) {
+    //export button
 
+    mode=-1;
+  }
 
+  if (sb5[0].hovered) {
+    PImage crop = get(w.x+3, w.y+3, w.w-3, w.h-3);
+    imageCount++;
+    crop.save("Diagrams/" + "diagram-" + imageCount + ".png");
+  }
+  
+  if (sb5[1].hovered) {
+    imageCount++;
+    beginRecord(SVG, "Diagrams/"+"diagram-" + imageCount+".svg");
 
+    exporting=true;
+
+    //w.renderWindow();   
+
+    for (Fill f : fills) {
+      f.render();
+    }
+    for (Line l : lines) {
+      l.render();
+    }
+    for (Point p : points) {
+      p.render();
+      for (Point x : p.ps) {
+        x.render();
+      }
+    }
+    for (TextBox tb : tbs) {
+      tb.render();
+    }
+    w.renderWindow();   
+
+    w.renderAxes();
+    endRecord();
+    exporting=false;
+  }
 
   if ((int)mode==3) {
 
@@ -325,6 +363,9 @@ void mousePressed() {
     for (Button b : sb4) {
       b.visible=false;
     }
+    for (Button b : sb5) {
+      b.visible=false;
+    }
   }
   if ((int)mode == 1) {
     for (Button b : sb1) {
@@ -337,6 +378,9 @@ void mousePressed() {
       b.visible=false;
     }
     for (Button b : sb4) {
+      b.visible=false;
+    }
+    for (Button b : sb5) {
       b.visible=false;
     }
   }
@@ -353,6 +397,9 @@ void mousePressed() {
     for (Button b : sb4) {
       b.visible=false;
     }
+    for (Button b : sb5) {
+      b.visible=false;
+    }
   }
   if ((int)mode == 3) {
     for (Button b : sb1) {
@@ -365,6 +412,26 @@ void mousePressed() {
       b.visible=false;
     }
     for (Button b : sb4) {
+      b.visible=true;
+    }
+    for (Button b : sb5) {
+      b.visible=false;
+    }
+  }
+  if ((int)mode == -1) {
+    for (Button b : sb1) {
+      b.visible=false;
+    }
+    for (Button b : sb2) {
+      b.visible=false;
+    }
+    for (Button b : sb3) {
+      b.visible=false;
+    }
+    for (Button b : sb4) {
+      b.visible=false;
+    }
+    for (Button b : sb5) {
       b.visible=true;
     }
   }
@@ -453,18 +520,15 @@ void keyPressed() {
       }
     }
   } else {
-    if(keyCode!=16){
-    
-      for (TextBox tb : tbs) {
-      if (tb.focusing) {
+    if (keyCode!=16) {
 
-        tb.write(key);
+      for (TextBox tb : tbs) {
+        if (tb.focusing) {
+
+          tb.write(key);
+        }
       }
     }
-    
-    
-    }
-    
   }
 }
 

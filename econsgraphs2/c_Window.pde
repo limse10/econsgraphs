@@ -28,9 +28,11 @@ class Window {
     h=height-u;
     mx=mouseX-u-3*m;
     my=height-u+m-mouseY;
-    fill(0);
-    textAlign(TOP, RIGHT);
-    text(mx+", " + my, u/10, height);
+    if (!exporting) {
+      fill(0);
+      textAlign(TOP, RIGHT);
+      text(mx+", " + my, u/10, height);
+    }
   }
 
   void renderAxes() {
