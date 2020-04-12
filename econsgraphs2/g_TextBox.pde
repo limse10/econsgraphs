@@ -5,7 +5,6 @@ class TextBox {
   String[] t = new String[0];
   int substring=0;
   boolean[] subscript = new boolean[0];
-  boolean subscripting = false;
   boolean focusing = false;
   boolean moving = false;
   boolean hovering = false;
@@ -22,7 +21,11 @@ class TextBox {
   }
 
   void render() {
-    println(subscript);
+    //for(int i =0;i<t.length;i++){
+    //println(t[i]);
+    //}
+    //    println("________________________________________");
+
     checkHover();
     if (focusing) {
       mode = 2;
@@ -57,7 +60,7 @@ class TextBox {
     }
 
 
-    write();
+    writeToScreen();
     if (focusing) {
       if (subscript[substring]) {
         w.write(" |", x+wid, y-reg+sub);
@@ -83,7 +86,7 @@ class TextBox {
   }
 
 
-  void write() {
+  void writeToScreen() {
     textAlign(LEFT, TOP);
     fill(0);
     for (int i = 0; i < t.length; i++) {
@@ -106,6 +109,21 @@ class TextBox {
         w.write(" "+t[i], x+offset, y);
       }
     }
+  }
+void write(char key){
+
+t[substring]=t[substring]+key;
+}
+  void backspace() {
+    for (int i = t.length-1; i>=0; i--) {
+      if (t[i].length()==0) {
+        t=del(t, i);
+        subscript=del(subscript,i);
+        substring--;
+      }
+    }
+    t[substring]=t[substring].substring(0,t[substring].length()-1);
+    
   }
   void checkHover() {
     if (w.mx>x&&w.mx<x+wid&&w.my<y&&w.my>y-h) {

@@ -374,23 +374,7 @@ void mousePressed() {
 
 
 void keyPressed() {
-  if (keyCode==17) {
-    for (TextBox tb : tbs) {
-      if (tb.focusing) {
-        tb.substring++; 
-        tb.t=append(tb.t, "");
-        if (tb.subscripting) {
-          tb.subscripting=false;
 
-          tb.subscript=(boolean[])append(tb.subscript, false);
-        } else {
-          tb.subscripting = true;
-
-          tb.subscript=(boolean[])append(tb.subscript, true);
-        }
-      }
-    }
-  }
 
   if (key==DELETE) {
     if (mode==0) {
@@ -450,18 +434,37 @@ void keyPressed() {
   }
 
 
+  if (keyCode==17) {
+    for (TextBox tb : tbs) {
+      if (tb.focusing) {
+        tb.substring++; 
+        tb.t=append(tb.t, "");
 
+        tb.subscript=(boolean[])append(tb.subscript, !tb.subscript[tb.subscript.length-1]);
+      }
+    }
+  } else if (key==BACKSPACE||key==DELETE) {
+    for (TextBox tb : tbs) {
+      if (tb.focusing) {
 
-  for (TextBox tb : tbs) {
-    if (tb.focusing) {
-      if (key!=BACKSPACE&&key!=DELETE) {
-        tb.t[tb.substring]=tb.t[tb.substring]+key;
-      } else {
-        if (tb.t[tb.substring].length()>0) {
-          //tb.t = tb.t.substring(0, tb.t[tb.substring].length()-1 );
+        if (tb.t[0].length()>0) {
+          tb.backspace();
         }
       }
     }
+  } else {
+    if(keyCode!=16){
+    
+      for (TextBox tb : tbs) {
+      if (tb.focusing) {
+
+        tb.write(key);
+      }
+    }
+    
+    
+    }
+    
   }
 }
 

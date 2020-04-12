@@ -1,6 +1,11 @@
 void generateTextBoxes() {
   for (Point p : points) {
-
+  for(Point x : p.ps){
+  //TextBox tb = new TextBox( x.x-u/2, x.y-u/10, u, u/3);
+    //tbs=(TextBox[])append(tbs, tb);
+  
+  
+  }
     TextBox tb = new TextBox( p.x-u/2, p.y-u/10, u, u/3);
     tbs=(TextBox[])append(tbs, tb);
   }
@@ -334,6 +339,29 @@ void deleteText() {
       tbs = del(tbs, i);
     }
   }
+}
+
+String[] del(String[] input, int index) {
+  String[] output = new String[input.length-1];
+  for (int i = 0; i<output.length; i++) {
+    if (i<index) {
+      output[i]=input[i];
+    } else {
+      output[i]=input[i+1];
+    }
+  }
+  return output;
+}
+boolean[] del(boolean[] input, int index) {
+  boolean[] output = new boolean[input.length-1];
+  for (int i = 0; i<output.length; i++) {
+    if (i<index) {
+      output[i]=input[i];
+    } else {
+      output[i]=input[i+1];
+    }
+  }
+  return output;
 }
 
 int[] del(int[] input, int index) {
