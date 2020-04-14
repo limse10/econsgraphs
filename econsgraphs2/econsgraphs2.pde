@@ -21,7 +21,6 @@ Container[] subs = new Container[5];
 
 
 Line[] lines = new Line[0];
-
 Line yaxis;
 Line xaxis;
 Line[] axes = new Line[2];
@@ -35,7 +34,6 @@ Boolean[] keys = new Boolean[3];
 Line copied;
 
 TextBox[] tbs = new TextBox[0];
-
 
 int x=0;
 int imageCount = 0;
@@ -79,37 +77,7 @@ void setup() {
   subs[3] = new Container(sub3, labels3, SUB);
   subs[4] = new Container(sub4, labels4, SUB);
 
-  //for (int i = 0; i < bs.length; i++) {
-  //  bs[i] = new Button(bls[i], (i+1)*u, 0, u, color(130), color(120));
-  //  bs[i].visible=true;
-  //}
-
-  //for (int i = 0; i < sb1.length; i++) {
-  //  sb1[i] = new Button(sb1l[i], 0, (i+1)*u, u, color(130), color(120));
-  //  sb1[i].visible=false;
-  //}
-
-  //for (int i = 0; i < sb2.length; i++) {
-  //  sb2[i] = new Button(sb2l[i], 0, (i+1)*u, u, color(130), color(120));
-  //  sb2[i].visible=false;
-  //}
-  //for (int i = 0; i < sb3.length; i++) {
-  //  sb3[i] = new Button(sb3l[i], 0, (i+1)*u, u, color(130), color(120));
-  //  sb3[i].visible=false;
-  //}
-  //for (int i = 0; i < sb4.length; i++) {
-  //  sb4[i] = new Button(sb4l[i], 0, (i+1)*u, u, color(130), color(120));
-  //  sb4[i].visible=false;
-  //}
-  //for (int i = 0; i < sb5.length; i++) {
-  //  sb5[i] = new Button(sb5l[i], 0, (i+1)*u, u, color(130), color(120));
-  //  sb5[i].visible=false;
-  //}
-
-  //sb4[3].bs=new Button[colors.length];
-  //for (int i = 0; i < colors.length; i++) {
-  //  sb4[3].bs[i] = new Button(colors[i], sb4[3], i);
-  //}
+  
 
 
   PVector[] tempy = new PVector[2];
@@ -127,5 +95,5 @@ void setup() {
 
 void draw() {
 
-  render(bg);
+  render(bg,false);
 }

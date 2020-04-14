@@ -1,8 +1,13 @@
-void render(color bg){
+void render(color bg, boolean svg) {
   background(bg);
 
-for (Fill f : fills) {
-    f.render();
+  for (int i = fills.length-1; i>=0;i--) { 
+    if(fills[i].suicide){
+    fills=del(fills,i);
+    
+    }else{
+    fills[i].render();
+    }
   }
 
   for (Line l : lines) {
@@ -19,30 +24,26 @@ for (Fill f : fills) {
   for (TextBox tb : tbs) {
     tb.render();
   }
-
-  main.render();
-  for (Container c : subs) {
-    for (Button b : c.buttons) {
-      b.render();
+  if (!svg) {
+    main.render();
+    for (Container c : subs) {
+      for (Button b : c.buttons) {
+        b.render();
+      }
     }
   }
-
   w.renderWindow();   
 
   w.renderAxes();
-
-
 }
 
 
 void generateTextBoxes() {
   for (Point p : points) {
-  for(Point x : p.ps){
-  //TextBox tb = new TextBox( x.x-u/2, x.y-u/10, u, u/3);
-    //tbs=(TextBox[])append(tbs, tb);
-  
-  
-  }
+    for (Point x : p.ps) {
+      //TextBox tb = new TextBox( x.x-u/2, x.y-u/10, u, u/3);
+      //tbs=(TextBox[])append(tbs, tb);
+    }
     TextBox tb = new TextBox( p.x-u/2, p.y-u/10, u, u/3);
     tbs=(TextBox[])append(tbs, tb);
   }
@@ -56,7 +57,7 @@ void generateTextBoxes() {
         py=p.y;
       }
     }
-    TextBox tb = new TextBox( px-u/4,py+u/2, u, u/3);
+    TextBox tb = new TextBox( px-u/4, py+u/2, u, u/3);
     tbs=(TextBox[])append(tbs, tb);
   }
 }

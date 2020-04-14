@@ -9,10 +9,10 @@ void mousePressed() {
   if (subs[0].buttons[1].hovered) {
     PVector[] p = new PVector[2];
     if (lines.length==0) {
-      p[0] = new PVector(0, 600);
+      p[0] = new PVector(0, 500);
       p[1] = new PVector(600, 0);
     } else if (lines.length==1) {
-      p[0] = new PVector(0, 600);
+      p[0] = new PVector(0, 500);
       p[1] = new PVector(300, 0);
     } else {
       p[0] = new PVector(100, 100);
@@ -200,7 +200,7 @@ void mousePressed() {
 
   if (subs[4].buttons[0].hovered) {
     imageCount++;
-    render(255);
+    render(255,false);
     PImage crop = get(int(w.x+u/2), int(w.y+u/2), int(w.w), int(w.h));
     crop.save("Diagrams/" + "diagram-" + imageCount + ".png");
   }
@@ -209,7 +209,7 @@ void mousePressed() {
     imageCount++;
     beginRecord(SVG, "Diagrams/"+"diagram-" + imageCount+".svg");
     exporting=true;
-    render(255);
+    render(255,true);
     endRecord();
     exporting=false;
   }
