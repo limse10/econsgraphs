@@ -1,12 +1,12 @@
 void mousePressed() {
   focus = false;
-  if (bs[0].hovered) {
+  if (mains[0].hovered) {
     mode=0;
   } 
-  if (sb1[0].hovered) {
+  if (subs[0].buttons[0].hovered) {
     deleteLine();
   }
-  if (sb1[1].hovered) {
+  if (subs[0].buttons[1].hovered) {
     PVector[] p = new PVector[2];
     if (lines.length==0) {
       p[0] = new PVector(0, 600);
@@ -21,7 +21,7 @@ void mousePressed() {
     Line l = new Line(0, p);
     lines = (Line[])append(lines, l);
   }
-  if (sb1[2].hovered) {
+  if (subs[0].buttons[2].hovered) {
     PVector[] p = new PVector[3];
 
     if (lines.length==2) {
@@ -40,7 +40,7 @@ void mousePressed() {
     Line l = new Line(0, p);
     lines = (Line[])append(lines, l);
   }
-  if (sb1[3].hovered) {
+  if (subs[0].buttons[3].hovered) {
     PVector[] p = new PVector[4];
     p[0] = new PVector(100, 400);
     p[1] = new PVector(500, 300);
@@ -49,14 +49,14 @@ void mousePressed() {
     Line l = new Line(0, p);
     lines = (Line[])append(lines, l);
   }
-  if (sb1[4].hovered) {
+  if (subs[0].buttons[4].hovered) {
     PVector[] p = new PVector[2];
     p[0] = new PVector(100, 100);
     p[1] = new PVector(500, 500);
     Line l = new Line(1, p);
     lines = (Line[])append(lines, l);
   }
-  if (bs[1].hovered) {
+  if (mains[1].hovered) {
     mode=1;
     calculatePoints();
     println("-------------------------------------");
@@ -72,20 +72,20 @@ void mousePressed() {
   } 
 
 
-  if (bs[2].hovered) {
+  if (mains[2].hovered) {
     mode=2;
   } 
 
-  if (sb3[0].hovered) {
+  if (subs[2].buttons[0].hovered) {
     generateTextBoxes();
   }
-  if (sb3[1].hovered) {
+  if (subs[2].buttons[1].hovered) {
 
     TextBox tb = new TextBox(-90, 570, u, u/3);
     tbs=(TextBox[])append(tbs, tb);
   }
 
-  if (sb3[2].hovered) {
+  if (subs[2].buttons[2].hovered) {
     for (int i=tbs.length-1; i>=0; i--) {
       if (tbs[i].focusing) {
         tbs=del(tbs, i);
@@ -107,7 +107,11 @@ void mousePressed() {
     }
   }
 
-  if (bs[3].hovered) {
+
+  if (subs[3].buttons[0].hovered) {
+    mode = 3.1;
+  }
+  if (mains[3].hovered) {
     /////////////shading
     mode = 3;
     calculatePoints();
@@ -121,10 +125,8 @@ void mousePressed() {
     }
   }
 
-  if (sb4[0].hovered) {
-    mode = 3.1;
-  }
-  if (sb4[1].hovered) {
+
+  if (subs[3].buttons[1].hovered) {
     Point[] fillpts = new Point[0];
     for (Point p : points) {
       for (Point x : p.ps) {
@@ -152,33 +154,33 @@ void mousePressed() {
     fillpts = new Point[0];
     mode = 3;
   }
-  if (sb4[2].hovered) {
+  if (subs[3].buttons[2].hovered) {
     deleteFill();
   }
 
 
-  if (sb4[3].hovered) {
-    if (!sb4[3].pressed) {
-      sb4[3].pressed = true;
-      for (Button b : sb4[3].bs) {
+  if (subs[3].buttons[3].hovered) {
+    if (!subs[3].buttons[3].pressed) {
+      subs[3].buttons[3].pressed = true;
+      for (Button b : subs[3].buttons[3].bs) {
         b.visible=true;
         mode=3.2;
       }
-    } else if (sb4[3].pressed) {
-      sb4[3].pressed = false;
-      for (Button b : sb4[3].bs) {
+    } else if (subs[3].buttons[3].pressed) {
+      subs[3].buttons[3].pressed = false;
+      for (Button b : subs[3].buttons[3].bs) {
         b.visible=false;
         mode=3;
       }
     }
   } else {
-    sb4[3].pressed = false;
-    for (Button b : sb4[3].bs) {
+    subs[3].buttons[3].pressed = false;
+    for (Button b : subs[3].buttons[3].bs) {
       b.visible=false;
     }
   }
 
-  for (Button b : sb4[3].bs) {
+  for (Button b : subs[3].buttons[3].bs) {
     if (mode==3.2) {
       if (b.hovered) {
         for (Fill f : fills) {
@@ -191,44 +193,23 @@ void mousePressed() {
   }
 
 
-  if (bs[4].hovered) {
+  if (mains[4].hovered) {
     //export button
-
     mode=-1;
   }
 
-  if (sb5[0].hovered) {
-    PImage crop = get(w.x+3, w.y+3, w.w-3, w.h-3);
+  if (subs[4].buttons[0].hovered) {
     imageCount++;
+    render(255);
+    PImage crop = get(int(w.x+u/2), int(w.y+u/2), int(w.w), int(w.h));
     crop.save("Diagrams/" + "diagram-" + imageCount + ".png");
   }
-  
-  if (sb5[1].hovered) {
+
+  if (subs[4].buttons[1].hovered) {
     imageCount++;
     beginRecord(SVG, "Diagrams/"+"diagram-" + imageCount+".svg");
-
     exporting=true;
-
-    //w.renderWindow();   
-
-    for (Fill f : fills) {
-      f.render();
-    }
-    for (Line l : lines) {
-      l.render();
-    }
-    for (Point p : points) {
-      p.render();
-      for (Point x : p.ps) {
-        x.render();
-      }
-    }
-    for (TextBox tb : tbs) {
-      tb.render();
-    }
-    w.renderWindow();   
-
-    w.renderAxes();
+    render(255);
     endRecord();
     exporting=false;
   }
@@ -241,7 +222,7 @@ void mousePressed() {
         f.focusing=true;
         focus=true;
       } else {
-        if (!sb4[3].hovered) {
+        if (!subs[3].buttons[3].hovered) {
           f.focusing=false;
           focus=false;
         }
@@ -351,87 +332,87 @@ void mousePressed() {
 
 
   if (mode == 0) {
-    for (Button b : sb1) {
+    for (Button b : subs[0].buttons) {
       b.visible=true;
     }
-    for (Button b : sb2) {
+    for (Button b : subs[1].buttons) {
       b.visible=false;
     }
-    for (Button b : sb3) {
+    for (Button b : subs[2].buttons) {
       b.visible=false;
     }
-    for (Button b : sb4) {
+    for (Button b : subs[3].buttons) {
       b.visible=false;
     }
-    for (Button b : sb5) {
+    for (Button b : subs[4].buttons) {
       b.visible=false;
     }
   }
   if ((int)mode == 1) {
-    for (Button b : sb1) {
+    for (Button b : subs[0].buttons) {
       b.visible=false;
     }
-    for (Button b : sb2) {
+    for (Button b : subs[1].buttons) {
       b.visible=true;
     }
-    for (Button b : sb3) {
+    for (Button b : subs[2].buttons) {
       b.visible=false;
     }
-    for (Button b : sb4) {
+    for (Button b : subs[3].buttons) {
       b.visible=false;
     }
-    for (Button b : sb5) {
+    for (Button b : subs[4].buttons) {
       b.visible=false;
     }
   }
   if (mode == 2) {
-    for (Button b : sb1) {
+    for (Button b : subs[0].buttons) {
       b.visible=false;
     }
-    for (Button b : sb2) {
+    for (Button b : subs[1].buttons) {
       b.visible=false;
     }
-    for (Button b : sb3) {
+    for (Button b : subs[2].buttons) {
       b.visible=true;
     }
-    for (Button b : sb4) {
+    for (Button b : subs[3].buttons) {
       b.visible=false;
     }
-    for (Button b : sb5) {
+    for (Button b : subs[4].buttons) {
       b.visible=false;
     }
   }
   if ((int)mode == 3) {
-    for (Button b : sb1) {
+    for (Button b : subs[0].buttons) {
       b.visible=false;
     }
-    for (Button b : sb2) {
+    for (Button b : subs[1].buttons) {
       b.visible=false;
     }
-    for (Button b : sb3) {
+    for (Button b : subs[2].buttons) {
       b.visible=false;
     }
-    for (Button b : sb4) {
+    for (Button b : subs[3].buttons) {
       b.visible=true;
     }
-    for (Button b : sb5) {
+    for (Button b : subs[4].buttons) {
       b.visible=false;
     }
   }
   if ((int)mode == -1) {
-    for (Button b : sb1) {
+    for (Button b : subs[0].buttons) {
       b.visible=false;
     }
-    for (Button b : sb2) {
+    for (Button b : subs[1].buttons) {
       b.visible=false;
     }
-    for (Button b : sb3) {
+    for (Button b : subs[2].buttons) {
       b.visible=false;
     }
-    for (Button b : sb4) {
+    for (Button b : subs[3].buttons) {
       b.visible=false;
     }
-    for (Button b : sb5) {
+    for (Button b : subs[4].buttons) {
       b.visible=true;
     }
   }

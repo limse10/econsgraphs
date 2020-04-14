@@ -1,3 +1,40 @@
+void render(color bg){
+  background(bg);
+
+for (Fill f : fills) {
+    f.render();
+  }
+
+  for (Line l : lines) {
+    l.render();
+  }
+
+  for (Point p : points) {
+    p.render();
+    for (Point x : p.ps) {
+      x.render();
+    }
+  }
+
+  for (TextBox tb : tbs) {
+    tb.render();
+  }
+
+  main.render();
+  for (Container c : subs) {
+    for (Button b : c.buttons) {
+      b.render();
+    }
+  }
+
+  w.renderWindow();   
+
+  w.renderAxes();
+
+
+}
+
+
 void generateTextBoxes() {
   for (Point p : points) {
   for(Point x : p.ps){
