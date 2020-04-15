@@ -1,18 +1,20 @@
 class Container {
   Button[] buttons;
   String[] labels;  
+  PImage[] icons;
   int type;
   float x1, y1, x2, y2;
   
 
-  Container(Button[] buttons, String[] labels, int type) {
+  Container(Button[] buttons, String[] labels, PImage[] icons, int type) {
     this.buttons=buttons;
     this.labels=labels;
     this.type=type;
+    this.icons = icons;
 
     if (type==MAIN) {
       for (int i=0; i<buttons.length; i++) {
-        this.buttons[i]=new Button(MAIN,labels[i], u, (i+1.5)*1.4*u, u, color(170), color(120));
+        this.buttons[i]=new Button(MAIN,labels[i], icons[i], u, (i+1.5)*1.4*u, u, color(170), color(120));
         this.buttons[i].visible=true;
       }
       x1=u;
@@ -32,6 +34,8 @@ class Container {
       y2=u;
     }
   }
+  
+
 
 
   void render() {

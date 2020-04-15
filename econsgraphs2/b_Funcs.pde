@@ -1,12 +1,11 @@
 void render(color bg, boolean svg) {
   background(bg);
 
-  for (int i = fills.length-1; i>=0;i--) { 
-    if(fills[i].suicide){
-    fills=del(fills,i);
-    
-    }else{
-    fills[i].render();
+  for (int i = fills.length-1; i>=0; i--) { 
+    if (fills[i].suicide) {
+      fills=del(fills, i);
+    } else {
+      fills[i].render();
     }
   }
 
@@ -37,6 +36,16 @@ void render(color bg, boolean svg) {
   w.renderAxes();
 }
 
+
+String[] listFileNames(String dir) {
+  File file = new File(dir);
+  if (file.isDirectory()) {
+    String names[] = file.list();
+    return names;
+  } else {
+    return null;
+  }
+}
 
 void generateTextBoxes() {
   for (Point p : points) {
@@ -347,7 +356,21 @@ void deleteLine() {
   for (int i = lines.length-1; i >= 0; i--) {
     if (lines[i].focusing) {
       for (int j = points.length-1; j >=0; j--) {
+        for (int f = fills.length-1; f >=0; f--) {
+          for (Point p : fills[f].ps) {
+            if (points[j]==p) {
+              fills=del(fills, f);
+            }
+          }
+        }
         for (int k = points[j].ps.length-1; k>=0; k--) {
+          for (int f = fills.length-1; f >=0; f--) {
+          for (Point p : fills[f].ps) {
+            if (points[j].ps[k]==p) {
+              fills=del(fills, f);
+            }
+          }
+        }
           if (points[j].ps[k].l1==lines[i]||points[j].ps[k].l2==lines[i]) {
             points[j].ps = del(points[j].ps, j);
           }

@@ -14,7 +14,6 @@ class Line {
   PVector[] transoff;
   boolean exselected=true;
   color c1 = color(0, 127, 255);
-
   color c2 = color(0,0,255);
 
 
