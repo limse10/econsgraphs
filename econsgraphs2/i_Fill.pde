@@ -8,6 +8,8 @@ class Fill {
   color c = color(random(255),random(255),random(255));
   int alpha = 127;
   int alpha2 = 200;
+  
+  boolean suicide=false;
 
   Fill(Point[] ps) {
     this.ps=ps;
@@ -15,7 +17,7 @@ class Fill {
   }
 
   void render() {
-    
+    try{
     psv = new PVector[ps.length];
     poly = new java.awt.Polygon();
 
@@ -40,10 +42,11 @@ class Fill {
     beginShape();
     for (PVector p : psv) {
       w.wvertex(p.x, p.y);
-      //println(p.x, p.y);
     }
     endShape();
-    //println("__________________________________________________");
+    }catch(Exception e){
+    suicide=true;
+    }
   }
 
   void checkHover() {

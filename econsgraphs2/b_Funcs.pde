@@ -1,8 +1,12 @@
-void render(color bg){
+void render(color bg, boolean svg) {
   background(bg);
 
-for (Fill f : fills) {
-    f.render();
+  for (int i = fills.length-1; i>=0; i--) { 
+    if (fills[i].suicide) {
+      fills=del(fills, i);
+    } else {
+      fills[i].render();
+    }
   }
 
   for (Line l : lines) {
@@ -19,30 +23,36 @@ for (Fill f : fills) {
   for (TextBox tb : tbs) {
     tb.render();
   }
-
-  main.render();
-  for (Container c : subs) {
-    for (Button b : c.buttons) {
-      b.render();
+  if (!svg) {
+    main.render();
+    for (Container c : subs) {
+      for (Button b : c.buttons) {
+        b.render();
+      }
     }
   }
-
   w.renderWindow();   
 
   w.renderAxes();
-
-
 }
 
 
+String[] listFileNames(String dir) {
+  File file = new File(dir);
+  if (file.isDirectory()) {
+    String names[] = file.list();
+    return names;
+  } else {
+    return null;
+  }
+}
+
 void generateTextBoxes() {
   for (Point p : points) {
-  for(Point x : p.ps){
-  //TextBox tb = new TextBox( x.x-u/2, x.y-u/10, u, u/3);
-    //tbs=(TextBox[])append(tbs, tb);
-  
-  
-  }
+    for (Point x : p.ps) {
+      //TextBox tb = new TextBox( x.x-u/2, x.y-u/10, u, u/3);
+      //tbs=(TextBox[])append(tbs, tb);
+    }
     TextBox tb = new TextBox( p.x-u/2, p.y-u/10, u, u/3);
     tbs=(TextBox[])append(tbs, tb);
   }
@@ -56,7 +66,7 @@ void generateTextBoxes() {
         py=p.y;
       }
     }
-    TextBox tb = new TextBox( px-u/4,py+u/2, u, u/3);
+    TextBox tb = new TextBox( px-u/4, py+u/2, u, u/3);
     tbs=(TextBox[])append(tbs, tb);
   }
 }
@@ -346,7 +356,21 @@ void deleteLine() {
   for (int i = lines.length-1; i >= 0; i--) {
     if (lines[i].focusing) {
       for (int j = points.length-1; j >=0; j--) {
+        for (int f = fills.length-1; f >=0; f--) {
+          for (Point p : fills[f].ps) {
+            if (points[j]==p) {
+              fills=del(fills, f);
+            }
+          }
+        }
         for (int k = points[j].ps.length-1; k>=0; k--) {
+          for (int f = fills.length-1; f >=0; f--) {
+          for (Point p : fills[f].ps) {
+            if (points[j].ps[k]==p) {
+              fills=del(fills, f);
+            }
+          }
+        }
           if (points[j].ps[k].l1==lines[i]||points[j].ps[k].l2==lines[i]) {
             points[j].ps = del(points[j].ps, j);
           }

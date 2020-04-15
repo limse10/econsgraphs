@@ -7,14 +7,14 @@ class Button {
   color c2;
   String t;
   Button[] bs = new Button[0];
-
+  PImage icon;
   color c;
   Button parent;
   int i;
 
   int type;
 
-  Button(int type, String t, float x, float y, float d, color c1, color c2) {
+  Button(int type, String t, PImage icon, float x, float y, float d, color c1, color c2) {
     this.t=t;
     this.x1=x;
     this.y1=y;
@@ -24,6 +24,7 @@ class Button {
     this.c1=c1;
     this.c2=c2;
     this.type=type;
+    this.icon=icon;
   }
   Button(int type, String t, float x1, float y1, float x2, float y2, float d, color c1, color c2) {
     this.t=t;
@@ -64,17 +65,21 @@ class Button {
           strokeWeight(2);
           ellipse(x1, y1, d, d);
 
-          textSize(14);
+          textSize(16);
           textAlign(CENTER, CENTER);
           fill(0);
           text(t, x1, y1+0.6*d);
+          //if(frameCount%100==0){
+          image(icon,x1-icon.width/2,y1-icon.height/2);
+        
+      //}
         } else if (type==SUB) {
           noStroke();
           strokeWeight(2);
           ellipse(x1, y1, d, d);
           ellipse(x2, y2, d, d);
           rect(x1,y1-d/2,x2-x1,d);
-          textSize(14);
+          textSize(16);
           textAlign(CENTER, CENTER);
           fill(0);
           text(t, (x1+x2)/2, y1);

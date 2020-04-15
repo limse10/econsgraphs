@@ -2,9 +2,10 @@ import processing.svg.*;
 
 Button[] mains = new Button[5];
 String[] labels = {"LINES", "POINTS", "TEXT", "SHADING", "EXPORT", };
+PImage[] mainicons = new PImage[5];
 Button[] sub0 = new Button[5];
 String[] labels0 = {"Delete Line\n(DEL)", "Add Line", "Add Curve", "Add Super\nCool Curve", "Add AS"};
-Button[] sub1 = new Button[1];
+Button[] sub1 = new Button[0];
 String[] labels1 = {"Add/Remove\nFree Points"};
 Button[] sub2 = new Button[3];
 String[] labels2 = {"Auto Add\nText Boxes", "+1 Text Box", "Delete Text\n(DEL)"};
@@ -21,7 +22,6 @@ Container[] subs = new Container[5];
 
 
 Line[] lines = new Line[0];
-
 Line yaxis;
 Line xaxis;
 Line[] axes = new Line[2];
@@ -35,7 +35,6 @@ Boolean[] keys = new Boolean[3];
 Line copied;
 
 TextBox[] tbs = new TextBox[0];
-
 
 int x=0;
 int imageCount = 0;
@@ -51,15 +50,20 @@ final int MAIN = 0;
 final int SUB = 1;
 
 
-
 void setup() {
-  String path = sketchPath("Diagrams/");
-  File file = new File(path);
-  if (file.exists() && file.isDirectory()) {
-    imageCount = file.listFiles().length;
+  String dir = sketchPath("Diagrams/");
+  File diags = new File(dir);
+  if (diags.exists() && diags.isDirectory()) {
+    imageCount =diags.listFiles().length;
+  }
+  
+  String icopath = sketchPath("Icons/");
+  String[] filenames = listFileNames(icopath);
+  for (int i = 0; i < mainicons.length; i++) {
+    mainicons[i] = loadImage(icopath+filenames[i]);
   }
 
-  size(1200, 800);
+  size(1200, 800, P2D);
   //fullScreen();
   surface.setResizable(true);
   u = height/10;
@@ -72,44 +76,14 @@ void setup() {
 
   w = new Window(1.5*u, u, width-1.5*u, height-u, u/2);
 
-  main = new Container(mains, labels, MAIN);
-  subs[0] = new Container(sub0, labels0, SUB);
-  subs[1] = new Container(sub1, labels1, SUB);
-  subs[2] = new Container(sub2, labels2, SUB);
-  subs[3] = new Container(sub3, labels3, SUB);
-  subs[4] = new Container(sub4, labels4, SUB);
+  main = new Container(mains, labels, mainicons, MAIN);
+  subs[0] = new Container(sub0, labels0, null, SUB);
+  subs[1] = new Container(sub1, labels1, null, SUB);
+  subs[2] = new Container(sub2, labels2, null, SUB);
+  subs[3] = new Container(sub3, labels3, null, SUB);
+  subs[4] = new Container(sub4, labels4, null, SUB);
 
-  //for (int i = 0; i < bs.length; i++) {
-  //  bs[i] = new Button(bls[i], (i+1)*u, 0, u, color(130), color(120));
-  //  bs[i].visible=true;
-  //}
 
-  //for (int i = 0; i < sb1.length; i++) {
-  //  sb1[i] = new Button(sb1l[i], 0, (i+1)*u, u, color(130), color(120));
-  //  sb1[i].visible=false;
-  //}
-
-  //for (int i = 0; i < sb2.length; i++) {
-  //  sb2[i] = new Button(sb2l[i], 0, (i+1)*u, u, color(130), color(120));
-  //  sb2[i].visible=false;
-  //}
-  //for (int i = 0; i < sb3.length; i++) {
-  //  sb3[i] = new Button(sb3l[i], 0, (i+1)*u, u, color(130), color(120));
-  //  sb3[i].visible=false;
-  //}
-  //for (int i = 0; i < sb4.length; i++) {
-  //  sb4[i] = new Button(sb4l[i], 0, (i+1)*u, u, color(130), color(120));
-  //  sb4[i].visible=false;
-  //}
-  //for (int i = 0; i < sb5.length; i++) {
-  //  sb5[i] = new Button(sb5l[i], 0, (i+1)*u, u, color(130), color(120));
-  //  sb5[i].visible=false;
-  //}
-
-  //sb4[3].bs=new Button[colors.length];
-  //for (int i = 0; i < colors.length; i++) {
-  //  sb4[3].bs[i] = new Button(colors[i], sb4[3], i);
-  //}
 
 
   PVector[] tempy = new PVector[2];
@@ -127,5 +101,5 @@ void setup() {
 
 void draw() {
 
-  render(bg);
+  render(bg, false);
 }

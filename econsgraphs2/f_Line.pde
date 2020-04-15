@@ -13,6 +13,8 @@ class Line {
   PVector next = new PVector();
   PVector[] transoff;
   boolean exselected=true;
+  color c1 = color(0, 127, 255);
+  color c2 = color(0,0,255);
 
 
   Line(int type, PVector[] p) {
@@ -54,7 +56,7 @@ class Line {
         strokeWeight(4);
 
         if (focusing&&mode==0) {
-          stroke(240, 128, 128);
+          stroke(c1);
           strokeWeight(4);
         }
         w.wline(curr.x, curr.y, next.x, next.y);
@@ -80,7 +82,7 @@ class Line {
         for (PVector x : p) {
 
           if (x.z==1) {
-            stroke(255, 0, 0);
+          stroke(c2);
             strokeWeight(4);
             w.wpoint(x.x, x.y, r/2);
           } else {
@@ -111,7 +113,7 @@ class Line {
       stroke(0);
       strokeWeight(4);
       if (focusing&&mode==0) {
-        stroke(240, 128, 128);
+        stroke(c1);
         strokeWeight(4);
       }
       w.wline(p[0].x, p[0].y, p[1].x-asr, p[0].y);
@@ -122,7 +124,7 @@ class Line {
         for (PVector x : p) {
 
           if (x.z==1) {
-            stroke(255, 0, 0);
+            stroke(c2);
             strokeWeight(4);
             w.wpoint(x.x, x.y, r/2);
           } else {
@@ -159,7 +161,7 @@ class Line {
       strokeWeight(2);
       stroke(0);
       if (hovering&&mode==1) {
-        stroke(255, 127, 127);
+        stroke(c1);
       }
 
       if (exselected||hovering) {

@@ -177,7 +177,7 @@ class Point {
           if ((y-y0)/(y1-y0)>0&&(y-y0)/(y1-y0)<1&&(x-x0)/(x1-x0)>0&&(x-x0)/(x1-x0)<1) {
             exists=true;
           } else {
-           
+
             exists = false;
           }
         } else {
@@ -188,6 +188,51 @@ class Point {
       } else if (l1.n==1&&l2.n==3) {//solve linear + cubic
       }
     } else if (l1.type==0&&l2.type==1) {//solve linear + AS
+      if (l1.n==1) {
+
+
+        PVector[] ps = new PVector[2];
+        y=l2.p[0].y;
+        ps[0]=new PVector(0, y);
+        ps[1]=new PVector(w.w, y);
+        Line l = new Line(2, ps);
+        Point p = new Point(0, l, l1);
+        p.solve();
+
+        if (p.x>l2.p[0].x&&p.x<l2.p[1].x-l2.asr) {
+
+          x=p.x;
+          y=p.y;
+          exists=true;
+        } else {
+          ps = new PVector[2];
+          x=l2.p[1].x;
+          ps[0]=new PVector(x, 0);
+          ps[1]=new PVector(x, w.h);
+          l = new Line(2, ps);
+          p = new Point(0, l, l1);
+          p.solve();
+          if (p.y<l2.p[1].y&&p.y>l2.p[0].y+l2.asr) {
+            x=p.x;
+            y=p.y;
+            exists=true;
+          }else{
+          float m = (l1.p[1].y-l1.p[0].y)/(l1.p[1].x-l1.p[0].x);
+          float c = l1.p[0].y-m*l1.p[0].x;
+          println(m,c);
+          float x1=l2.p[1].x-l2.asr;
+          float y1=l2.p[0].y+l2.asr;
+          float A = sq(m)+1;
+          float B = 2*(m*(c-y1)-x1);
+          float C = sq(x1)+sq(c-y1)-sq(l2.asr);
+          println(A,B,C);
+          x=(-B+sqrt(sq(B)-4*A*C))/(2*A);
+          y=m*x+c;
+          println(x,y);
+          exists = true;
+          }
+        }
+      }
     } else if (l1.type==2&&l2.type==0) {
       if (l2.n==1) {//solve extension and linear
         if (l1.p[0].x==l1.p[1].x) {
@@ -209,7 +254,7 @@ class Point {
           exists=false;
         }
       } else if (l2.n==2) {//solve extension and quadratic
-        PVector ps[] = new PVector[2];
+        PVector[] ps = new PVector[2];
         if (l1.p[0].x==l1.p[1].x) {
           x=l1.p[0].x;
           ps[0]=new PVector(x, 0);
@@ -253,7 +298,7 @@ class Point {
         } else if (l2.p[0].y==l2.p[1].y) {
           x=Float.NaN;
           y=Float.NaN;
-        }else {
+        } else {
           y=l1.p[0].y;
           float m = (l2.p[1].y-l2.p[0].y)/(l2.p[1].x-l2.p[0].x);
           float c = l2.p[0].y-m*l2.p[0].x;
