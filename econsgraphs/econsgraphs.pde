@@ -1,4 +1,12 @@
 import processing.svg.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.datatransfer.*;
+import javax.swing.*;
+import java.io.*;
+
+
+SVG svg = new SVG();
 
 Button[] mains = new Button[5];
 String[] labels = {"LINES", "POINTS", "TEXT", "SHADING", "EXPORT", };
@@ -15,6 +23,8 @@ Button[] sub4 = new Button[2];
 String[] labels4 = {"Export PNG", "Export SVG"};
 Button[] colorbuttons = new Button[6];
 color[] colors = {color(0, 128, 255), color(0, 255, 0), color(255, 0, 0), color(0, 255, 255), color(255, 255, 0), color(255, 0, 255)};
+
+
 
 Window w;
 
@@ -59,11 +69,13 @@ void setup() {
     imageCount =diags.listFiles().length;
   }
 
-  String icopath = sketchPath("source/Icons/");
+  String icopath = sketchPath("source/icons/main/");
   String[] filenames = listFileNames(icopath);
   for (int i = 0; i < mainicons.length; i++) {
     mainicons[i] = loadImage(icopath+filenames[i]);
   }
+
+
 
   size(1200, 800, P2D);
   //fullScreen();
@@ -75,7 +87,7 @@ void setup() {
   keys[1]=false;
   keys[2]=false;
 
-
+  
   w = new Window(1.5*u, u, width-1.5*u, height-u, u/2);
 
   main = new Container(mains, labels, mainicons, MAIN);
@@ -105,6 +117,10 @@ void setup() {
   xaxis=new Line(3, tempx);
   axes[0]=xaxis;
   axes[1]=yaxis;
+  
+  
+  
+  
 }
 
 

@@ -210,11 +210,13 @@ void mousePressed() {
 
   if (subs[4].buttons[1].hovered) {
     imageCount++;
-    beginRecord(SVG, "Diagrams/"+"diagram-" + imageCount+".svg");
-    exporting=true;
-    render(255, true);
-    endRecord();
-    exporting=false;
+    //beginRecord(SVG, "Diagrams/"+"diagram-" + imageCount+".svg");
+    //exporting=true;
+    //render(255, true);
+    //endRecord();
+    //exporting=false;
+      svg.writeToSVG("Diagrams/"+"diagram-"+ imageCount+".svg");
+
   }
 
   if ((int)mode==3) {
