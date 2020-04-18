@@ -1,9 +1,20 @@
 import processing.svg.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.datatransfer.*;
-import javax.swing.*;
-import java.io.*;
+
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.SystemFlavorMap;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.Writer;
+
+import java.nio.charset.StandardCharsets;
+
+import org.apache.batik.svggen.SVGGraphics2D;
+import org.apache.batik.svggen.SVGGraphics2DIOException;
 
 
 SVG svg = new SVG();

@@ -12,6 +12,8 @@ class SVG {
     renderLines();
     endSVG();
     saveStrings(path, file);
+    //println(join(file, "\n"));
+    copyToClipboard(join(file, "\n"));
   }
 
   void beginSVG() {
@@ -67,3 +69,82 @@ class SVG {
     return val;
   }
 }
+
+
+//class SVG {
+
+//  int fileheight;
+//  int filewidth;
+//  PGraphicsSVG svg;
+
+//  void writeToSVG(String path) {
+//    filewidth=(int)(w.w+u/2);
+//    fileheight=(int)(w.h+u/2);
+//    svg = (PGraphicsSVG)createGraphics(filewidth, fileheight, SVG, path);
+//    svg.beginDraw();
+//    renderAxes();
+//    renderLines();
+
+//    //    svg.background(#4db748);
+//    //    svg.noFill();
+//    //    svg.strokeWeight(27);
+//    //    int a = 80;
+//    //    int b = 220;
+//    //    svg.line(a, a, b, b);
+//    //    svg.line(a, b, b, a);
+//    //    svg.line(a, a, b, a);
+//    //    svg.line(a, b, b, b);
+//    //    svg.ellipse(150, 150, 250, 250);
+//    svg.endDraw();
+
+//    copyToClipboard(svg);
+
+
+//    println("svg copied to clipboard");
+//  }
+
+
+
+//  void renderAxes() {
+//    svg.stroke(0);
+//    svg.strokeWeight(4);
+//    svg.line(toAbs(0, 0), toAbs(0, 1), toAbs(0, 0), toAbs(w.h-3*w.m, 1));
+//    svg.line(toAbs(0, 0), toAbs(0, 1), toAbs(w.w-10*w.m, 0), toAbs(0, 1));
+//    svg.line(toAbs(0, 0), toAbs(w.h-3*w.m, 1), toAbs(-w.m/4, 0), toAbs(w.h-3.5*w.m, 1));
+//    svg.line(toAbs(0, 0), toAbs(w.h-3*w.m, 1), toAbs(w.m/4, 0), toAbs(w.h-3.5*w.m, 1));
+//    svg.line(toAbs(w.w-10*w.m, 0), toAbs(0, 1), toAbs(w.w-10.5*w.m, 0), +toAbs(w.m/4, 1));
+//    svg.line(toAbs(w.w-10*w.m, 0), toAbs(0, 1), toAbs(w.w-10.5*w.m, 0), +toAbs(-w.m/4, 1));
+//  }
+
+//  void renderLines() {
+//    svg.stroke(0);
+//    svg.strokeWeight(4);
+//    svg.noFill();
+    
+//    for (Line l : lines) {
+//      if (l.type==0) {
+//        if (l.n==1) {
+
+//          svg.line(toAbs(l.p[0].x, 0), toAbs(l.p[0].y, 1), toAbs(l.p[1].x, 0), toAbs(l.p[1].y, 1));
+//        } else if (l.n==2) {
+
+//          svg.beginShape();
+//          svg.vertex(toAbs(l.p[0].x, 0), toAbs(l.p[0].y, 1));
+//          svg.quadraticVertex(toAbs(l.p[1].x, 0), toAbs(l.p[1].y, 1), toAbs(l.p[2].x, 0), toAbs(l.p[2].y, 1));
+//          svg.endShape();
+//        }
+//      }
+//    }
+//  }
+
+
+
+//  float toAbs(float val, int dim) {
+//    if (dim==0) {
+//      return (w.x+3*w.m+val-u/2);
+//    } else if (dim==1) {
+//      return (fileheight-w.m-val-u/2);
+//    }
+//    return val;
+//  }
+//}
