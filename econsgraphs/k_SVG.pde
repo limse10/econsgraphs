@@ -57,7 +57,7 @@ class SVG {
         file=append(file, "<line x1='"+toAbs(l.p[1].x, 0)+"' y1='"+toAbs(l.p[1].y, 1)+"' x2='"+toAbs(l.p[1].x, 0)+"' y2='"+toAbs(l.p[0].y+l.asr, 1)+"'/>");
         file=append(file, "<path d='M "+ toAbs(l.p[1].x-l.asr, 0)+" " +toAbs(l.p[0].y, 1) +" A" +l.asr+" " +l.asr+", 0,0,0,"+toAbs(l.p[1].x, 0)+" "+toAbs(l.p[0].y+l.asr, 1)+"'/>");
         file=append(file, "</g>");
-      }else{println("uj");}
+      }
     }
     file=append(file, "</g>");
   }
