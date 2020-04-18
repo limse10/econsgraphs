@@ -28,30 +28,36 @@ class SVG {
   }
 
   void renderAxes() {
-    file=append(file, "<g style='stroke-linecap:round; stroke-width:4;'>");
- 
-    file=append(file, "<line style='fill:none;' x1='"+toAbs(0, 0)+"' y1='"+toAbs(0, 1)+"' x2='"+toAbs(0, 0)+"' y2='"+toAbs(w.h-3*w.m, 1)+"'/>");
-    file=append(file, "<line style='fill:none;' x1='"+toAbs(0, 0)+"' y1='"+toAbs(0, 1)+"' x2='"+toAbs(w.w-10*w.m, 0)+"' y2='"+toAbs(0, 1)+"'/>");
-    file=append(file, "<line style='fill:none;' x1='"+toAbs(0, 0)+"' y1='"+toAbs(w.h-3*w.m, 1)+"' x2='"+toAbs(-w.m/4, 0)+"' y2='"+toAbs(w.h-3.5*w.m, 1)+"'/>");
-    file=append(file, "<line style='fill:none;' x1='"+toAbs(0, 0)+"' y1='"+toAbs(w.h-3*w.m, 1)+"' x2='"+toAbs(w.m/4, 0)+"' y2='"+toAbs(w.h-3.5*w.m, 1)+"'/>");
-    file=append(file, "<line style='fill:none;' x1='"+toAbs(w.w-10*w.m, 0)+"' y1='"+toAbs(0, 1)+"' x2='"+toAbs(w.w-10.5*w.m, 0)+"' y2='"+toAbs(w.m/4, 1)+"'/>");
-    file=append(file, "<line style='fill:none;' x1='"+toAbs(w.w-10*w.m, 0)+"' y1='"+toAbs(0, 1)+"' x2='"+toAbs(w.w-10.5*w.m, 0)+"' y2='"+toAbs(-w.m/4, 1)+"'/>");
+    file=append(file, "<g style='stroke-linecap:round; stroke-width:4; fill:none'>");
+
+    file=append(file, "<line x1='"+toAbs(0, 0)+"' y1='"+toAbs(0, 1)+"' x2='"+toAbs(0, 0)+"' y2='"+toAbs(w.h-3*w.m, 1)+"'/>");
+    file=append(file, "<line x1='"+toAbs(0, 0)+"' y1='"+toAbs(0, 1)+"' x2='"+toAbs(w.w-10*w.m, 0)+"' y2='"+toAbs(0, 1)+"'/>");
+    file=append(file, "<line x1='"+toAbs(0, 0)+"' y1='"+toAbs(w.h-3*w.m, 1)+"' x2='"+toAbs(-w.m/4, 0)+"' y2='"+toAbs(w.h-3.5*w.m, 1)+"'/>");
+    file=append(file, "<line x1='"+toAbs(0, 0)+"' y1='"+toAbs(w.h-3*w.m, 1)+"' x2='"+toAbs(w.m/4, 0)+"' y2='"+toAbs(w.h-3.5*w.m, 1)+"'/>");
+    file=append(file, "<line x1='"+toAbs(w.w-10*w.m, 0)+"' y1='"+toAbs(0, 1)+"' x2='"+toAbs(w.w-10.5*w.m, 0)+"' y2='"+toAbs(w.m/4, 1)+"'/>");
+    file=append(file, "<line x1='"+toAbs(w.w-10*w.m, 0)+"' y1='"+toAbs(0, 1)+"' x2='"+toAbs(w.w-10.5*w.m, 0)+"' y2='"+toAbs(-w.m/4, 1)+"'/>");
 
     file=append(file, "</g>");
   }
-  
+
   void renderLines() {
-    file=append(file, "<g style='stroke-linecap:round; stroke-width:4; fill:transparent'>");
+    file=append(file, "<g style='stroke-linecap:round; stroke-width:4; fill:none'>");
     for (Line l : lines) {
       if (l.type==0) {
-        if(l.n==1){
-        file=append(file, "<line style='fill:none;' x1='"+toAbs(l.p[0].x, 0)+"' y1='"+toAbs(l.p[0].y, 1)+"' x2='"+toAbs(l.p[1].x, 0)+"' y2='"+toAbs(l.p[1].y, 1)+"'/>");
-      }else if(l.n==2){
-      file=append(file,"<path d='M "+ toAbs(l.p[0].x, 0)+" " +toAbs(l.p[0].y, 1) +" Q" +toAbs(l.p[1].x, 0)+" " +toAbs(l.p[1].y, 1)+", "+toAbs(l.p[2].x, 0)+" "+toAbs(l.p[2].y, 1)+"'/>");
-      
-      }
-    }
-     
+        if (l.n==1) {
+          file=append(file, "<line x1='"+toAbs(l.p[0].x, 0)+"' y1='"+toAbs(l.p[0].y, 1)+"' x2='"+toAbs(l.p[1].x, 0)+"' y2='"+toAbs(l.p[1].y, 1)+"'/>");
+        } else if (l.n==2) {
+          file=append(file, "<path d='M "+ toAbs(l.p[0].x, 0)+" " +toAbs(l.p[0].y, 1) +" Q" +toAbs(l.p[1].x, 0)+" " +toAbs(l.p[1].y, 1)+", "+toAbs(l.p[2].x, 0)+" "+toAbs(l.p[2].y, 1)+"'/>");
+        } else if (l.n==3) {
+          file=append(file, "<path d='M "+ toAbs(l.p[0].x, 0)+" " +toAbs(l.p[0].y, 1) +" C" +toAbs(l.p[1].x, 0)+" " +toAbs(l.p[1].y, 1)+", "+toAbs(l.p[2].x, 0)+" "+toAbs(l.p[2].y, 1)+", "+toAbs(l.p[3].x, 0)+" "+toAbs(l.p[3].y, 1)+"'/>");
+        }
+      } else if (l.type==1) {
+        file=append(file, "<g>");
+        file=append(file, "<line x1='"+toAbs(l.p[0].x, 0)+"' y1='"+toAbs(l.p[0].y, 1)+"' x2='"+toAbs(l.p[1].x-l.asr, 0)+"' y2='"+toAbs(l.p[0].y, 1)+"'/>");
+        file=append(file, "<line x1='"+toAbs(l.p[1].x, 0)+"' y1='"+toAbs(l.p[1].y, 1)+"' x2='"+toAbs(l.p[1].x, 0)+"' y2='"+toAbs(l.p[0].y+l.asr, 1)+"'/>");
+        file=append(file, "<path d='M "+ toAbs(l.p[1].x-l.asr, 0)+" " +toAbs(l.p[0].y, 1) +" A" +l.asr+" " +l.asr+", 0,0,0,"+toAbs(l.p[1].x, 0)+" "+toAbs(l.p[0].y+l.asr, 1)+"'/>");
+        file=append(file, "</g>");
+      }else{println("uj");}
     }
     file=append(file, "</g>");
   }
@@ -120,7 +126,7 @@ class SVG {
 //    svg.stroke(0);
 //    svg.strokeWeight(4);
 //    svg.noFill();
-    
+
 //    for (Line l : lines) {
 //      if (l.type==0) {
 //        if (l.n==1) {
