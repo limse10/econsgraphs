@@ -12,7 +12,6 @@ public void mouseClicked(MouseEvent evt) {
 
 
 
-
 void mousePressed() {
   focus = false;
 
