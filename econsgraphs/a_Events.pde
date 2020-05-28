@@ -1,6 +1,28 @@
+
+
+public void mouseClicked(MouseEvent evt) {
+  if (evt.getCount() == 2) {
+
+    if (mode==3.1) {
+      if(tempfill!=null){
+      endfill();
+    }}
+  }
+}
+
+
+
+
 void mousePressed() {
   focus = false;
-  if (mains[0].hovered) {
+
+ 
+    
+    if(tempfill!=null&&mode!=3.1){
+      endfill();
+    }
+
+  if (mains[1].hovered) {
     mode=0;
   } 
   if (subs[0].buttons[4].hovered) {
@@ -56,7 +78,7 @@ void mousePressed() {
     Line l = new Line(1, p);
     lines = (Line[])append(lines, l);
   }
-  if (mains[1].hovered) {
+  if (mains[2].hovered) {
     mode=1;
     calculatePoints();
     println("-------------------------------------");
@@ -72,7 +94,7 @@ void mousePressed() {
   } 
 
 
-  if (mains[2].hovered) {
+  if (mains[3].hovered) {
     mode=2;
   } 
 
@@ -94,7 +116,7 @@ void mousePressed() {
   }
 
 
-
+  if(mode==2){
   for (TextBox tb : tbs) {
     if (tb.hovering&&!focus) {
       tb.xoff=w.mx-tb.x;
@@ -106,12 +128,19 @@ void mousePressed() {
       focus=false;
     }
   }
-
+  }
 
   if (subs[3].buttons[0].hovered) {
+    
+   
+    
+    
+    
+    
+    
     mode = 3.1;
   }
-  if (mains[3].hovered) {
+  if (mains[4].hovered) {
     /////////////shading
     mode = 3;
     calculatePoints();
@@ -126,97 +155,66 @@ void mousePressed() {
   }
 
 
-  if (subs[3].buttons[1].hovered) {
-    Point[] fillpts = new Point[0];
-    for (Point p : points) {
-      for (Point x : p.ps) {
-
-        if (x.shading) {
-          fillpts=(Point[])append(fillpts, x);
-        }
-      }
-      if (p.shading) {
-        fillpts=(Point[])append(fillpts, p);
-      }
-    }
-    Fill f = new Fill(sortP(fillpts));
-
-    fills=(Fill[])append(fills, f);
-
-
-    for (Point p : points) {
-      for (Point x : p.ps) {
-
-        x.shading=false;
-      }
-      p.shading=false;
-    }
-    fillpts = new Point[0];
-    mode = 3;
-  }
-  if (subs[3].buttons[3].hovered) {
+  
+  if (subs[3].buttons[2].hovered) {
     deleteFill();
   }
 
 
-  if (subs[3].buttons[2].hovered) {
+  if (subs[3].buttons[1].hovered) {
 
-    if (!subs[3].buttons[2].pressed) {
-                  println("er");
-
-      subs[3].buttons[2].pressed = true;
-      for (Button b : subs[3].buttons[2].bs) {
+    if (!subs[3].buttons[1].pressed) {
+      subs[3].buttons[1].pressed = true;
+      for (Button b : subs[3].buttons[1].bs) {
         b.visible=true;
         mode=3.2;
       }
-    } else if (subs[3].buttons[2].pressed) {
-      subs[3].buttons[2].pressed = false;
-      for (Button b : subs[3].buttons[2].bs) {
+    } else if (subs[3].buttons[1].pressed) {
+      subs[3].buttons[1].pressed = false;
+      for (Button b : subs[3].buttons[1].bs) {
         b.visible=false;
         mode=3;
       }
     }
   } else {
-    subs[3].buttons[2].pressed = false;
-    for (Button b : subs[3].buttons[2].bs) {
+    subs[3].buttons[1].pressed = false;
+    for (Button b : subs[3].buttons[1].bs) {
       b.visible=false;
     }
   }
 
-  for (Button b : subs[3].buttons[2].bs) {
+  for (Button b : subs[3].buttons[1].bs) {
     if (mode==3.2) {
       if (b.hovered) {
-        for (Fill f : fills) {
-          if (f.focusing) {
-            f.c=b.c;
-          }
-        }
+        mode=3.3;
+        fillcol=b.c;
       }
     }
   }
-  
 
-  if (mains[4].hovered) {
+
+  if (mains[0].hovered) {
     //export button
     mode=-1;
   }
-
-  if (subs[4].buttons[0].hovered) {
+if (subs[4].buttons[0].hovered) {
+    new_diagram();
+  }
+  if (subs[4].buttons[1].hovered) {
     imageCount++;
     render(255, false);
     PImage crop = get(int(w.x+u/2), int(w.y+u/2), int(w.w), int(w.h));
     crop.save("Diagrams/" + "diagram-" + imageCount + ".png");
   }
 
-  if (subs[4].buttons[1].hovered) {
+  if (subs[4].buttons[2].hovered) {
     imageCount++;
     //beginRecord(SVG, "Diagrams/"+"diagram-" + imageCount+".svg");
     //exporting=true;
     //render(255, true);
     //endRecord();
     //exporting=false;
-      svg.writeToSVG("Diagrams/"+"diagram-"+ imageCount+".svg");
-
+    svg.writeToSVG("Diagrams/"+"diagram-"+ imageCount+".svg");
   }
 
   if ((int)mode==3) {
@@ -226,8 +224,12 @@ void mousePressed() {
       if (f.hovering&&!focus) {
         f.focusing=true;
         focus=true;
+        if (mode==3.3) {
+          f.c=fillcol;
+          mode=3;
+        }
       } else {
-        if (!subs[3].buttons[3].hovered) {
+        if (!subs[3].buttons[2].hovered) {
           f.focusing=false;
           focus=false;
         }
@@ -332,6 +334,29 @@ void mousePressed() {
         }
       }
     }
+
+
+    Point[] fillpts = new Point[0];
+    for (Point p : points) {
+      for (Point x : p.ps) {
+
+        if (x.shading) {
+          fillpts=(Point[])append(fillpts, x);
+        }
+      }
+      if (p.shading) {
+        fillpts=(Point[])append(fillpts, p);
+      }
+    }
+    if (fillpts.length>2) {
+      Fill f = new Fill(sortP(fillpts));
+
+      tempfill=f;
+    }
+
+
+
+    fillpts = new Point[0];
   }
 
 
@@ -449,7 +474,7 @@ void keyPressed() {
       keys[2]=true;
     }
     if (keys[1]&&keys[0]&&!keys[2]) {
-      println("copy");
+     
       for (Line l : lines) {
         if (l.focusing) {
           l.focusing=false;
@@ -458,7 +483,7 @@ void keyPressed() {
       }
     }
     if (keys[1]&&keys[0]&&!keys[2]) {
-      println("copy");
+    
       for (Line l : lines) {
         if (l.focusing) {
           l.focusing=false;
@@ -467,7 +492,7 @@ void keyPressed() {
       }
     }
     if (keys[2]&&keys[0]&&!keys[1]) {
-      println("paste");
+     
       if (copied!=null) {
         PVector[] p = new PVector[copied.p.length];
         for (int i = 0; i < p.length; i++) {

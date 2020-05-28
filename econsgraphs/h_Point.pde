@@ -10,10 +10,29 @@ class Point {
   boolean shading = false;
   Point[] ps = new Point[0];
   Line[] ls = new Line[0];
-
+  Point parent;
 
 
   Point(int type, Line l1, Line l2) {
+    this.type=type;
+    this.l1=l1;
+    this.l2=l2;
+    solve();
+    if (type==0||type==1) {
+      PVector[] x = new PVector[2];
+      x[0] = new PVector(this.x, this.y);
+      x[1] = new PVector(this.x, 0);
+      Line lx = new Line(2, x);
+      ls=(Line[])append(ls, lx);
+      PVector[] y = new PVector[2];
+      y[0] = new PVector(this.x, this.y);
+      y[1] = new PVector(0, this.y);
+      Line ly = new Line(2, y);
+      ls=(Line[])append(ls, ly);
+    }
+  }
+  Point(int type, Line l1, Line l2, Point parent) {
+    this.parent=parent;
     this.type=type;
     this.l1=l1;
     this.l2=l2;
@@ -48,7 +67,24 @@ class Point {
     Line ly = new Line(2, y);
     ls=(Line[])append(ls, ly);
   }
-
+  Point(int type, Line l1, Line l2, int root, Point parent) {
+    this.parent=parent;
+    this.type=type;
+    this.l1=l1;
+    this.l2=l2;
+    this.root = root; //determines which root to take in case of quadratic 
+    solve();
+    PVector[] x = new PVector[2];
+    x[0] = new PVector(this.x, this.y);
+    x[1] = new PVector(this.x, 0);
+    Line lx = new Line(2, x);
+    ls=(Line[])append(ls, lx);
+    PVector[] y = new PVector[2];
+    y[0] = new PVector(this.x, this.y);
+    y[1] = new PVector(0, this.y);
+    Line ly = new Line(2, y);
+    ls=(Line[])append(ls, ly);
+  }
   void render() {
     solve();
     if (sqrt(sq(w.mx-x)+sq(w.my-y))<0.5*r) {
@@ -86,6 +122,15 @@ class Point {
         }
         if (type==1||type==2) {
           if (hovering||selected) {
+            if (hovering && parent!=null) {
+ 
+              w.wline(x, y, parent.x, parent.y);
+              
+              if (parent.parent!=null && parent.type>=1) {
+
+                w.wline(parent.x, parent.y, parent.parent.x, parent.parent.y);
+              }
+            }
             strokeWeight(2);
             w.wcircle(x, y, r);
           }
@@ -104,6 +149,12 @@ class Point {
         }
         if (type==1||type==2) {
           if (hovering||shading) {
+            if (hovering && parent!=null) {
+              w.wline(x, y, parent.x, parent.y);
+              if (parent.parent!=null) {
+                w.wline(parent.x, parent.y, parent.parent.x, parent.parent.y);
+              }
+            }
             strokeWeight(2);
             w.wcircle(x, y, r);
           }
@@ -216,20 +267,20 @@ class Point {
             x=p.x;
             y=p.y;
             exists=true;
-          }else{
-          float m = (l1.p[1].y-l1.p[0].y)/(l1.p[1].x-l1.p[0].x);
-          float c = l1.p[0].y-m*l1.p[0].x;
-          println(m,c);
-          float x1=l2.p[1].x-l2.asr;
-          float y1=l2.p[0].y+l2.asr;
-          float A = sq(m)+1;
-          float B = 2*(m*(c-y1)-x1);
-          float C = sq(x1)+sq(c-y1)-sq(l2.asr);
-          println(A,B,C);
-          x=(-B+sqrt(sq(B)-4*A*C))/(2*A);
-          y=m*x+c;
-          println(x,y);
-          exists = true;
+          } else {
+            float m = (l1.p[1].y-l1.p[0].y)/(l1.p[1].x-l1.p[0].x);
+            float c = l1.p[0].y-m*l1.p[0].x;
+            println(m, c);
+            float x1=l2.p[1].x-l2.asr;
+            float y1=l2.p[0].y+l2.asr;
+            float A = sq(m)+1;
+            float B = 2*(m*(c-y1)-x1);
+            float C = sq(x1)+sq(c-y1)-sq(l2.asr);
+            println(A, B, C);
+            x=(-B+sqrt(sq(B)-4*A*C))/(2*A);
+            y=m*x+c;
+            println(x, y);
+            exists = true;
           }
         }
       }

@@ -1,3 +1,15 @@
+void new_diagram(){
+
+lines = new Line[0];
+points = new Point[0];
+fills = new Fill[0];
+fill = new Point[0];
+tbs = new TextBox[0];
+
+
+}
+
+
 void render(color bg, boolean svg) {
   background(bg);
 
@@ -8,7 +20,9 @@ void render(color bg, boolean svg) {
       fills[i].render();
     }
   }
-
+  if (tempfill!=null) { 
+    tempfill.render();
+  }
   for (Line l : lines) {
     l.render();
   }
@@ -28,9 +42,23 @@ void render(color bg, boolean svg) {
     for (Container c : subs) {
       for (Button b : c.buttons) {
         b.render();
+        for(Button b1 : b.bs){
+        b1.render();
+    }
       }
     }
+    
   }
+  
+  
+  if(mode==3.3){
+    
+    stroke(0);
+    fill(fillcol);
+  w.wcircle(w.mx,w.my,u/2);
+  
+  }
+  
   w.renderWindow();   
 
   w.renderAxes();
@@ -45,6 +73,24 @@ String[] listFileNames(String dir) {
   } else {
     return null;
   }
+}
+
+
+void endfill() {
+
+
+  fills=(Fill[])append(fills, tempfill);
+
+
+  for (Point p : points) {
+    for (Point x : p.ps) {
+
+      x.shading=false;
+    }
+    p.shading=false;
+  }
+  tempfill=null;
+  mode = 3;
 }
 
 void generateTextBoxes() {
@@ -241,12 +287,12 @@ void calculatePoints() {
               } else 
               if (k.type==0) {
                 if (k.n==1) {
-                  Point p = new Point(1, l, k);
+                  Point p = new Point(1, l, k, x);
                   x.ps=(Point[])append(x.ps, p);
                 } else if (k.n==2) {
-                  Point p = new Point(1, l, k, -1);
+                  Point p = new Point(1, l, k, -1, x);
                   x.ps=(Point[])append(x.ps, p);
-                  p = new Point(1, l, k, 1);
+                  p = new Point(1, l, k, 1, x);
                   x.ps=(Point[])append(x.ps, p);
                 }
               }
@@ -264,7 +310,7 @@ void calculatePoints() {
               }
             }
             if (!solved) {
-              Point p = new Point(2, k, l);
+              Point p = new Point(2, k, l, x);
               x.ps=(Point[])append(x.ps, p);
             }
           }
@@ -288,17 +334,17 @@ void calculatePoints() {
 
               if (!solved) {
                 if (Float.isNaN(x.x)) {
-                  Point p = new Point(-1, l, k);
+                  Point p = new Point(-1, l, k, c);
                   x.ps=(Point[])append(x.ps, p);
                 } else 
                 if (k.type==0) {
                   if (k.n==1) {
-                    Point p = new Point(1, l, k);
+                    Point p = new Point(1, l, k, c);
                     x.ps=(Point[])append(x.ps, p);
                   } else if (k.n==2) {
-                    Point p = new Point(1, l, k, -1);
+                    Point p = new Point(1, l, k, -1, c);
                     x.ps=(Point[])append(x.ps, p);
-                    p = new Point(1, l, k, 1);
+                    p = new Point(1, l, k, 1, c);
                     x.ps=(Point[])append(x.ps, p);
                   }
                 }
@@ -316,7 +362,7 @@ void calculatePoints() {
                 }
               }
               if (!solved) {
-                Point p = new Point(2, k, l);
+                Point p = new Point(2, k, l, c);
                 x.ps=(Point[])append(x.ps, p);
               }
             }
@@ -365,12 +411,12 @@ void deleteLine() {
         }
         for (int k = points[j].ps.length-1; k>=0; k--) {
           for (int f = fills.length-1; f >=0; f--) {
-          for (Point p : fills[f].ps) {
-            if (points[j].ps[k]==p) {
-              fills=del(fills, f);
+            for (Point p : fills[f].ps) {
+              if (points[j].ps[k]==p) {
+                fills=del(fills, f);
+              }
             }
           }
-        }
           if (points[j].ps[k].l1==lines[i]||points[j].ps[k].l2==lines[i]) {
             points[j].ps = del(points[j].ps, j);
           }

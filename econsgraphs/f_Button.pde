@@ -43,9 +43,9 @@ class Button {
     this.parent=parent;
     this.i=i;
     type=SUBSUB;
-    d=parent.d/3;
-    x1=(parent.x1)+d*(i%3);
-    y1=parent.y1+parent.d/2+d*(i/3);
+    d=parent.d*4/5;
+    x1=(parent.x1+parent.x2)/2+d*(i%3-1);
+    y1=parent.y1+parent.d+d*(i/3);
   }
 
   void render() {
@@ -68,14 +68,13 @@ class Button {
           textAlign(CENTER, CENTER);
           fill(0);
           text(t, x1, y1+0.6*d);
-          image(icon,x1-icon.width/2,y1-icon.height/2);
-
+          image(icon, x1-icon.width/2, y1-icon.height/2);
         } else if (type==SUB) {
           noStroke();
           strokeWeight(2);
           ellipse(x1, y1, d, d);
           ellipse(x2, y2, d, d);
-          rect(x1,y1-d/2,x2-x1,d);
+          rect(x1, y1-d/2, x2-x1, d);
           textSize(16);
           textAlign(CENTER, CENTER);
           fill(0);
@@ -95,14 +94,23 @@ class Button {
       }
     } else if (type==2) {
       hovered=false;
+      if (dist(mouseX, mouseY, x1, y1)<d/2) {
+        hovered=true;
+      }
       if (visible) {
-        fill(c);
+        fill(c, alpha);
+        if (hovered) {
+          noFill();
+          stroke(127);
+          strokeWeight(3);
+          ellipse(x1,y1,d, d);
+          fill(c, alpha2);
+          
+        }
+
         noStroke();
         strokeWeight(2);
-        rect(x1, y1, d, d);
-        if (dist(mouseX, mouseY, x1, y1)<d/2) {
-          hovered=true;
-        }
+        ellipse(x1, y1, 0.9*d, 0.9*d);
       }
     }
   }

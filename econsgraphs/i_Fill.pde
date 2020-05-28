@@ -5,10 +5,10 @@ class Fill {
   java.awt.Polygon poly;
   boolean hovering= false;
   boolean focusing = false;
-  color c = color(random(255),random(255),random(255));
-  int alpha = 127;
-  int alpha2 = 200;
-  
+  color c = color(255,100,20);
+    int alpha = 127;
+    int alpha2 = 200;
+
   boolean suicide=false;
 
   Fill(Point[] ps) {
@@ -17,35 +17,36 @@ class Fill {
   }
 
   void render() {
-    try{
-    psv = new PVector[ps.length];
-    poly = new java.awt.Polygon();
+    try {
+      psv = new PVector[ps.length];
+      poly = new java.awt.Polygon();
 
-    for (int i = 0; i<ps.length; i++) {
-      psv[i] = new PVector(ps[i].x, ps[i].y);
-    }
-    identifyCurves();
-    psv=sortP(psv);
+      for (int i = 0; i<ps.length; i++) {
+        psv[i] = new PVector(ps[i].x, ps[i].y);
+      }
+      identifyCurves();
+      psv=sortP(psv);
 
 
-    for (PVector p : psv) {
-      poly.addPoint((int)p.x, (int)p.y);
-    }
-    checkHover();
+      for (PVector p : psv) {
+        poly.addPoint((int)p.x, (int)p.y);
+      }
+      checkHover();
 
-    if (hovering||focusing) {
-      fill(c,alpha2);
-    } else {
-      fill(c,alpha);
+      if (hovering||focusing) {
+        fill(c, alpha2);
+      } else {
+        fill(c, alpha);
+      }
+      noStroke();
+      beginShape();
+      for (PVector p : psv) {
+        w.wvertex(p.x, p.y);
+      }
+      endShape();
     }
-    noStroke();
-    beginShape();
-    for (PVector p : psv) {
-      w.wvertex(p.x, p.y);
-    }
-    endShape();
-    }catch(Exception e){
-    suicide=true;
+    catch(Exception e) {
+      suicide=true;
     }
   }
 

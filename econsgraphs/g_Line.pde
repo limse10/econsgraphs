@@ -1,4 +1,4 @@
-class Line {
+  class Line {
   int type;
   int n;
   PVector[] p;
